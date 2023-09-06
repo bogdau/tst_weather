@@ -1,0 +1,7 @@
+The device should send data that can be customized in a file.
+The information output must be in the terminal. 
+The output must be in degrees Celsius and Fahrenheit with pressure in pascals. 
+The output should look like this: Temperature: 24.57 ℃, 75.92 ℉ Pressure: 101325 Pa. 
+Part of the pressure should be fixed, i.e. it should not move from left to right. 
+The type of sensor is Bosch BME280, the connection type is i2c, and the sensor address must be specified in the configuration file 
+
