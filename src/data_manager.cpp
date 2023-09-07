@@ -26,7 +26,6 @@ int DataManager::data_manager(){
 
         bmp.delay_ms(120);
     }
-
     
     return 0;
 }
