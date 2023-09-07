@@ -1,10 +1,9 @@
+#include <iostream>
+#include <memory>
 #include "data_manager.h"
 
 int main()
 {
-    int i = 0;
-    while(i == 0){
-
-    }
-    return 0;
+    std::unique_ptr<DataManager> dtmg;
+    dtmg->data_manager();
 }

@@ -3,11 +3,9 @@
 
 class DataManager
 {
-private:
-
 public:
     DataManager();
-    
+    int data_manager();
 };
 
 #endif /* __DATA_MANAGER_H__ */
