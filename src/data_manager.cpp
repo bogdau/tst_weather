@@ -15,17 +15,18 @@ int DataManager::data_manager(){
     DataReading dtrd(bmp);
     DataOutput dtot;
 
-    if (bmp.read()==0){
-        while(bmp.read()==0){
+
+    while(true){
+        if(bmp.read() != 0){
+            std::cerr << "can't read data" << std::endl;
+            bmp.delay_ms(120);
+        }
         dtrd.dataRefresh();
         dtot.print_info(dtrd.getTempCels(),dtrd.getTempFahr(),dtrd.getPressure() );
 
         bmp.delay_ms(120);
-        }
     }
-    else{ 
-        std::cout << "data can't be read" << std::endl;
-    }
+
     
     return 0;
 }
