@@ -1,15 +1,16 @@
-#ifndef __JSON_H__
-#define __JSON_H__
+#ifndef __SETTINGS_H__
+#define __SETTINGS_H__
 
 #include "boost/property_tree/ptree.hpp"
 #include <boost/property_tree/json_parser.hpp>
 
-class Json{
+class Settings{
 private:
     int time = 0;
 public:
-    Json();
+    Settings();
+    int refreshTime();
     int getTime();
 };
 
-#endif /* __JSON_H__ */
+#endif /* __SETTINGS_H__ */
