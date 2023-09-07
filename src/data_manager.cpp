@@ -1,4 +1,4 @@
-#include <memory>
+#include <iostream>
 #include "data_manager.h"
 #include "data_output.h"
 #include "data_reading.h"
@@ -11,15 +11,20 @@ int DataManager::data_manager(){
     {
         return -1;
     }
-    
+
     DataReading dtrd(bmp);
     DataOutput dtot;
 
-    while(bmp.read() == 0){
+    if (bmp.read()==0){
+        while(bmp.read()==0){
         dtrd.dataRefresh();
         dtot.print_info(dtrd.getTempCels(),dtrd.getTempFahr(),dtrd.getPressure() );
 
         bmp.delay_ms(120);
+        }
+    }
+    else{ 
+        std::cout << "data can't be read" << std::endl;
     }
     
     return 0;
