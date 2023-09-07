@@ -14,5 +14,6 @@ add_executable(tst_weather src/main.cpp)
 target_include_directories(tst_weather PUBLIC src/)
 target_sources(tst_weather PUBLIC src/data_output.cpp
                             src/data_reading.cpp
-                            src/data_manager.cpp)
+                            src/data_manager.cpp
+                            src/json.cpp)
 target_link_libraries(tst_weather PUBLIC raspberry_bmp280)

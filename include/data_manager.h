@@ -3,6 +3,8 @@
 
 class DataManager
 {
+private:
+    int data_output = 0;
 public:
     DataManager();
     int data_manager();

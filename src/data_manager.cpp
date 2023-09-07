@@ -1,7 +1,9 @@
 #include <iostream>
+
 #include "data_manager.h"
 #include "data_output.h"
 #include "data_reading.h"
+#include "json.h"
 
 int DataManager::data_manager(){ 
     BMP280 bmp;
@@ -14,7 +16,7 @@ int DataManager::data_manager(){
 
     DataReading dtrd(bmp);
     DataOutput dtot;
-
+    Json json;
 
     while(true){
         if(bmp.read() != 0){
@@ -24,9 +26,8 @@ int DataManager::data_manager(){
         dtrd.dataRefresh();
         dtot.print_info(dtrd.getTempCels(),dtrd.getTempFahr(),dtrd.getPressure() );
 
-        bmp.delay_ms(120);
+        bmp.delay_ms(json.getTime());
     }
 
-    
     return 0;
 }
