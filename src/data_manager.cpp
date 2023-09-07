@@ -1,7 +1,9 @@
 #include <iostream>
+
 #include "data_manager.h"
 #include "data_output.h"
 #include "data_reading.h"
+#include "settings.h"
 
 int DataManager::data_manager(){ 
     BMP280 bmp;
@@ -14,9 +16,16 @@ int DataManager::data_manager(){
 
     DataReading dtrd(bmp);
     DataOutput dtot;
+    Settings settings;
+    settings.loadSettings("../config/config.json");
 
-
+    int i = 0;
     while(true){
+        if(i == 19){
+            settings.loadSettings("../config/config.json");
+            i = 0;
+        }
+
         if(bmp.read() != 0){
             std::cerr << "can't read data" << std::endl;
             bmp.delay_ms(120);
@@ -24,9 +33,9 @@ int DataManager::data_manager(){
         dtrd.dataRefresh();
         dtot.print_info(dtrd.getTempCels(),dtrd.getTempFahr(),dtrd.getPressure() );
 
-        bmp.delay_ms(120);
+        i++;
+        bmp.delay_ms(settings.getSensorPollIntervalMs());
     }
 
-    
     return 0;
 }
