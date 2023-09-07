@@ -1,13 +1,11 @@
 #include "../include/data_reading.h"
-
-DataReading::DataReading(BMP280 &bmp):
-bmp(&bmp)
-{
-}
+#include <iostream>
+DataReading::DataReading(BMP280 &bmp)
+:bmp(&bmp) {}
 
 void DataReading::dataRefresh(){
-    temp_celsium = bmp->getTemperature();
-    pressure = bmp->getPressure();
+        temp_celsium = bmp->getTemperature();
+        pressure = bmp->getPressure();
 }
 
 double DataReading::getPressure(){
