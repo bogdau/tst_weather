@@ -25,11 +25,8 @@ int DataManager::data_manager(){
         dtot.print_info(dtrd.getTempCels(),dtrd.getTempFahr(),dtrd.getPressure() );
 
         bmp.delay_ms(120);
-        }
     }
-    else{ 
-        std::cout << "data can't be read" << std::endl;
-    }
+
     
     return 0;
 }
