@@ -9,8 +9,8 @@ private:
     int time = 0;
 public:
     Settings();
-    int refreshTime();
-    int getTime();
+    int loadSettings(std::string json_path);
+    int getSensorPollIntervalMs();
 };
 
 #endif /* __SETTINGS_H__ */

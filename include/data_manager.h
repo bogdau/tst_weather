@@ -1,12 +1,11 @@
 #ifndef __DATA_MANAGER_H__
 #define __DATA_MANAGER_H__
 
+#include <iostream>
 class DataManager
 {
-private:
-    int data_output = 0;
 public:
-    DataManager();
+    DataManager() = default;
     int data_manager();
 };
 

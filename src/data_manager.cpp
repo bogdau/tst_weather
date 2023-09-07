@@ -17,12 +17,12 @@ int DataManager::data_manager(){
     DataReading dtrd(bmp);
     DataOutput dtot;
     Settings settings;
-    settings.refreshTime();
+    settings.loadSettings("../config/config.json");
 
     int i = 0;
     while(true){
         if(i == 19){
-            settings.refreshTime();
+            settings.loadSettings("../config/config.json");
             i = 0;
         }
 
@@ -34,7 +34,7 @@ int DataManager::data_manager(){
         dtot.print_info(dtrd.getTempCels(),dtrd.getTempFahr(),dtrd.getPressure() );
 
         i++;
-        bmp.delay_ms(settings.getTime());
+        bmp.delay_ms(settings.getSensorPollIntervalMs());
     }
 
     return 0;

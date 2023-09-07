@@ -5,8 +5,8 @@ using namespace boost::property_tree;
 
 Settings::Settings(){}
 
-int Settings::refreshTime(){
-    std::ifstream jsonFile("../config/config.json");
+int Settings::loadSettings(std::string json_path){
+    std::ifstream jsonFile(json_path);
     if (!jsonFile){
         time = 100;
         std::cerr << "Error opening file\n";
@@ -17,6 +17,6 @@ int Settings::refreshTime(){
     time = pt.get<float>("data_output_time");
 }
 
-int Settings::getTime(){
+int Settings::getSensorPollIntervalMs(){
     return int(time);
 }
