@@ -4,4 +4,4 @@ The output must be in degrees Celsius and Fahrenheit with pressure in pascals.
 The output should look like this: Temperature: 24.57 ℃, 75.92 ℉ Pressure: 101325 Pa. 
 Part of the pressure should be fixed, i.e. it should not move from left to right. 
 The type of sensor is Bosch BME280, the connection type is i2c, and the sensor address must be specified in the configuration file 
-
+Data must be transferred to the local MQTT server 
