@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD 14)
 add_library(bosch_bmp280 STATIC driver/bmp280.c)
 target_include_directories(bosch_bmp280 PUBLIC driver/)
 
-add_library(raspberry_bmp280 STATIC include/raspberry_bmp280.cpp)
+add_library(raspberry_bmp280 STATIC src/raspberry_bmp280.cpp)
 target_include_directories(raspberry_bmp280 PUBLIC include)
 target_link_libraries(raspberry_bmp280 PUBLIC bosch_bmp280)
 
@@ -15,5 +15,6 @@ target_include_directories(tst_weather PUBLIC src/)
 target_sources(tst_weather PUBLIC src/data_output.cpp
                             src/data_reading.cpp
                             src/data_manager.cpp
-                            src/settings.cpp)
-target_link_libraries(tst_weather PUBLIC raspberry_bmp280)
+                            src/settings.cpp
+                            src/mqtt.cpp)
+target_link_libraries(tst_weather PUBLIC raspberry_bmp280 mosquittopp)
