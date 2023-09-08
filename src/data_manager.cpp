@@ -52,16 +52,21 @@ void DataManager::mqtt_publish(double temp_cel, double temp_far, double pressure
     std::stringstream mqtt_string_builder;
     mqtt_string_builder  << "Temperature: " <<  std::fixed << std::setprecision(2) << temp_cel<<" ℃, "<< temp_far  <<   " ℉ "  << " Pressure: " <<  int(pressure) << " Pa" ;;
 
+    std::stringstream mqtt_string_raw_data;
+    mqtt_string_raw_data << std::fixed << std::setprecision(2) << temp_cel << " " << temp_far  << " " << pressure;
+
     std::string client_id = "user";
     std::string  host  = "localhost";
-    int port = 1883;
-    std::string MQTT_TOPIC = "Test";
+    const int port = 1883;
+    std::string MQTT_TOPIC = "Data Output";
 
     int mid_val {4};
 	int *mid {&mid_val};
-	std::string  topic_val = "Test";
+    std::string topic_val = MQTT_TOPIC;
 	std::string topic = topic_val;
+    std::string topic_raw = "Raw";
 	std::string payload = mqtt_string_builder.str();
+    std::string payload_raw_data = mqtt_string_raw_data.str();
 
 	int qos {1};
 	bool retain {true};
@@ -78,11 +83,11 @@ void DataManager::mqtt_publish(double temp_cel, double temp_far, double pressure
     }
     else
         iot_client->subscribe(NULL, MQTT_TOPIC.c_str());
-
-        int publish_status = iot_client->publish(mid, topic.c_str(), payload.size(), payload.c_str(), qos, retain);
-        if(publish_status != MOSQ_ERR_SUCCESS){
+        int publish_raw_data = iot_client->publish(mid, topic_raw.c_str(), payload_raw_data.size(), payload_raw_data.c_str(), qos, retain);
+        int publish_full_data_status = iot_client->publish(mid, topic.c_str(), payload.size(), payload.c_str(), qos, retain);
+        if(publish_full_data_status != MOSQ_ERR_SUCCESS or publish_raw_data != MOSQ_ERR_SUCCESS){
             std::cout << "Error: unable to publish message to Cumulocity MQTT broker.";
-    }
+        }
 
     mosqpp::lib_cleanup();
 }
