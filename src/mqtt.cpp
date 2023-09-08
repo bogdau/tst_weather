@@ -47,32 +47,5 @@ void mqtt_client::on_message(const struct mosquitto_message *message)
         #ifdef DEBUG
             std::cout << buf << std::endl;
         #endif
-        
-        if (!strcmp(buf, "STATUS"))
-        {
-            snprintf(buf, payload_size, "This is a Status Message...");
-            publish(NULL, PUBLISH_TOPIC, strlen(buf), buf);
-            #ifdef DEBUG
-                std::cout << "Status Request Recieved." << std::endl;
-            #endif
-        }
-
-        if (!strcmp(buf, "ON"))
-        {
-            snprintf(buf, payload_size, "Turning on...");
-            publish(NULL, PUBLISH_TOPIC, strlen(buf), buf);
-            #ifdef DEBUG
-                std::cout << "Request to turn on." << std::endl;
-            #endif
-        }
-
-        if (!strcmp(buf, "OFF"))
-        {
-            snprintf(buf, payload_size, "Turning off...");
-            publish(NULL, PUBLISH_TOPIC, strlen(buf), buf);
-            #ifdef DEBUG
-                std::cout << "Request to turn off." << std:: endl;
-            #endif
-        }
     }
 }
