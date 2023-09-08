@@ -47,8 +47,7 @@ void mqtt_client::on_message(const struct mosquitto_message *message)
         #ifdef DEBUG
             std::cout << buf << std::endl;
         #endif
-
-        // Examples of messages for M2M communications...
+        
         if (!strcmp(buf, "STATUS"))
         {
             snprintf(buf, payload_size, "This is a Status Message...");

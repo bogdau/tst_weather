@@ -34,7 +34,7 @@ int DataManager::data_manager(){
             bmp.delay_ms(120);
         }
         dtrd.dataRefresh();
-        start_mqtt(dtrd.getTempCels(),dtrd.getTempFahr(),dtrd.getPressure() );
+        mqtt_publish(dtrd.getTempCels(),dtrd.getTempFahr(),dtrd.getPressure() );
         dtot.print_info(dtrd.getTempCels(),dtrd.getTempFahr(),dtrd.getPressure() );
 
         i++;
@@ -45,7 +45,7 @@ int DataManager::data_manager(){
 }
 
 
-void DataManager::start_mqtt(double temp_cel, double temp_far, double pressure){
+void DataManager::mqtt_publish(double temp_cel, double temp_far, double pressure){
     class mqtt_client *iot_client;
     int rc;  
 
@@ -83,8 +83,6 @@ void DataManager::start_mqtt(double temp_cel, double temp_far, double pressure){
         if(publish_status != MOSQ_ERR_SUCCESS){
             std::cout << "Error: unable to publish message to Cumulocity MQTT broker.";
     }
-
-    
 
     mosqpp::lib_cleanup();
 }
