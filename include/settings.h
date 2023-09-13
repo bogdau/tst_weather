@@ -6,10 +6,12 @@
 
 class Settings{
 private:
+    std::string json_path = "config/config.json";
     int time = 0;
 public:
     Settings();
-    int loadSettings(std::string json_path);
+    void generateJsonFile();
+    void loadSettings();
     int getSensorPollIntervalMs();
 };
 
