@@ -1,49 +1,52 @@
 #include <iostream>
 #include <iomanip>
 #include <mosquittopp.h>
+#include <QTimer>
+#include <unistd.h>
 
-#include "data_manager.h"
-#include "data_output.h"
-#include "data_reading.h"
-#include "settings.h"
-#include "mqtt.h"
+#include "include/data_manager.h"
+#include "include/data_output.h"
+#include "include/data_reading.h"
+#include "include/settings.h"
+#include "include/mqtt.h"
+#include "form.h"
 
-int DataManager::data_manager(){ 
-    BMP280 bmp;
-    
-    uint8_t ret = bmp.init(BMP280::CSBState::High, BMP280_FILTER_COEFF_16, BMP280_OS_16X, BMP280_OS_2X, BMP280_ODR_62_5_MS);
-    if (ret != 0)
-    {
-        return -1;
-    }
+DataManager::DataManager():m_reader(nullptr){}
 
-    DataReading dtrd(bmp);
-    DataOutput dtot;
-    Settings settings;
-    settings.loadSettings("../config/config.json");
+void DataManager::class_manager(DataReading *dtrd){
+    m_reader = std::unique_ptr<DataReading>(dtrd);
+}
 
-    int i = 0;
-    while(true){
-        if(i == 19){
-            settings.loadSettings("../config/config.json");
-            i = 0;
-        }
+int DataManager::data_manager(){
+    settings.loadSettings();
 
-        if(bmp.read() != 0){
-            std::cerr << "can't read data" << std::endl;
-            bmp.delay_ms(120);
-        }
-        dtrd.dataRefresh();
-        mqtt_publish(dtrd.getTempCels(),dtrd.getTempFahr(),dtrd.getPressure() );
-        dtot.print_info(dtrd.getTempCels(),dtrd.getTempFahr(),dtrd.getPressure() );
+    Form form;
+    timer->setInterval(settings.getSensorPollIntervalMs());
+    connect(timer, &QTimer::timeout, this, &DataManager::colect_data);
 
-        i++;
-        bmp.delay_ms(settings.getSensorPollIntervalMs());
-    }
-
+    timer->start();
     return 0;
 }
 
+
+int DataManager::colect_data(){
+    DataOutput dtot;
+
+    static int i = 0;
+    if(i == 19){
+        settings.loadSettings();
+        i = 0;
+    }
+    i++;
+
+    timer->setInterval(settings.getSensorPollIntervalMs());
+
+    emit tempChange(m_reader->readTemp());
+    emit pressChange(m_reader->readPressure());
+
+    mqtt_publish(m_reader->readTemp(),(m_reader->readTemp() * 1.8) + 32,m_reader->readPressure());
+    dtot.print_info(m_reader->readTemp(),(m_reader->readTemp() * 1.8) + 32,m_reader->readPressure());
+}
 
 void DataManager::mqtt_publish(double temp_cel, double temp_far, double pressure){
     class mqtt_client *iot_client;
@@ -81,13 +84,14 @@ void DataManager::mqtt_publish(double temp_cel, double temp_far, double pressure
     {
         iot_client->reconnect();
     }
-    else
+    else{
         iot_client->subscribe(NULL, MQTT_TOPIC.c_str());
         int publish_raw_data = iot_client->publish(mid, topic_raw.c_str(), payload_raw_data.size(), payload_raw_data.c_str(), qos, retain);
         int publish_full_data_status = iot_client->publish(mid, topic.c_str(), payload.size(), payload.c_str(), qos, retain);
         if(publish_full_data_status != MOSQ_ERR_SUCCESS or publish_raw_data != MOSQ_ERR_SUCCESS){
             std::cout << "Error: unable to publish message to Cumulocity MQTT broker.";
         }
+    }
 
     mosqpp::lib_cleanup();
 }
