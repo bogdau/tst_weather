@@ -1,7 +1,7 @@
 #ifndef RASPBERRY_BMP280_RASPBERRY_BMP280_H
 #define RASPBERRY_BMP280_RASPBERRY_BMP280_H
 
-#include "bmp280_defs.h"
+#include "../driver/bmp280_defs.h"
 #include <cstdint>
 
 #define BMP280_E_I2C_OPEN_FAIL (-20)

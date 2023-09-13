@@ -3,7 +3,7 @@ project(tst_weather)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_library(bosch_bmp280 STATIC driver/bmp280.c)
+add_library(bosch_bmp280 STATIC driver/bmp280.cpp)
 target_include_directories(bosch_bmp280 PUBLIC driver/)
 
 add_library(raspberry_bmp280 STATIC src/raspberry_bmp280.cpp)
