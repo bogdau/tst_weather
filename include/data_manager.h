@@ -15,7 +15,7 @@ class DataManager : public QObject
 
 private:
     std::unique_ptr<DataReading> m_reader;
-    QTimer *timer = new QTimer (this);
+    QTimer *timer;
     Settings settings;
 signals:
     void tempChange(double temp);
