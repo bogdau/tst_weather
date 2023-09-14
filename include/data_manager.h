@@ -13,13 +13,14 @@ class DataManager : public QObject
 {
     Q_OBJECT
 
+private:
+    std::unique_ptr<DataReading> m_reader;
+    QTimer *timer = new QTimer (this);
+    Settings settings;
 signals:
     void tempChange(double temp);
     void pressChange(double press);
 public:
-    std::unique_ptr<DataReading> m_reader;
-    QTimer *timer = new QTimer (this);
-    Settings settings;
     DataManager();
     void class_manager(DataReading *dtrd);
     int data_manager();
