@@ -1,20 +1,30 @@
-#include "settings.h"
+#include "include/settings.h"
 #include <iostream>
 
 using namespace boost::property_tree;
 
-Settings::Settings(){}
-
-int Settings::loadSettings(std::string json_path){
+Settings::Settings(){
     std::ifstream jsonFile(json_path);
     if (!jsonFile){
         time = 100;
-        std::cerr << "Error opening file\n";
-        return time;
+        std::cerr << "Error opening file, generate another one\n";
+        generateJsonFile();
     }
+}
+
+void Settings::generateJsonFile(){
+    boost::property_tree::ptree pt;
+
+    pt.put("data_output_time", "1000");
+
+    boost::property_tree::write_json(json_path, pt);
+}
+
+void Settings::loadSettings(){
+    std::ifstream jsonFile(json_path);
     ptree pt;
     json_parser::read_json(jsonFile, pt);
-    time = pt.get<float>("data_output_time");
+    time = pt.get<int>("data_output_time");
 }
 
 int Settings::getSensorPollIntervalMs(){

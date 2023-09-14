@@ -1,22 +1,13 @@
 #ifndef __DATA_READING_H__
 #define __DATA_READING_H__
-#include "../include/raspberry_bmp280.h"
+#include "raspberry_bmp280.h"
+#include <QObject>
 
-class DataReading{
-private:
-    double pressure = 0;
-    double temp_celsium = 0;
-    double temp_farenheit = 0;
 
-    BMP280 *bmp = nullptr;
-
+class DataReading : QObject{
 public:
-    DataReading(BMP280 &bmp);
-    
-    void dataRefresh();
-    double getPressure();
-    double getTempCels();
-    double getTempFahr();
+    virtual double readTemp() = 0;
+    virtual double readPressure() = 0;
 };
 
 #endif /* __DATA_READING_H__ */
