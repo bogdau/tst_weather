@@ -11,7 +11,9 @@
 #include "include/mqtt.h"
 #include "form.h"
 
-DataManager::DataManager():m_reader(nullptr){}
+DataManager::DataManager(Settings &set):m_reader(nullptr),settings(set){
+    timer = new QTimer (this);
+}
 
 void DataManager::class_manager(DataReading *dtrd){
     m_reader = std::unique_ptr<DataReading>(dtrd);
@@ -20,10 +22,8 @@ void DataManager::class_manager(DataReading *dtrd){
 int DataManager::data_manager(){
     settings.loadSettings();
 
-    Form form;
     timer->setInterval(settings.getSensorPollIntervalMs());
     connect(timer, &QTimer::timeout, this, &DataManager::colect_data);
-
     timer->start();
     return 0;
 }
@@ -33,12 +33,11 @@ int DataManager::colect_data(){
     DataOutput dtot;
 
     static int i = 0;
-    if(i == 19){
+    if(i == 3){
         settings.loadSettings();
         i = 0;
     }
     i++;
-
     timer->setInterval(settings.getSensorPollIntervalMs());
 
     emit tempChange(m_reader->readTemp());

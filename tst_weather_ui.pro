@@ -19,7 +19,8 @@ SOURCES += \
     src/main.cpp \
     src/mqtt.cpp \
     src/raspberry_bmp280.cpp \
-    src/settings.cpp
+    src/settings.cpp\
+    settings_pop_up.cpp\
 
 
 HEADERS += \
@@ -34,10 +35,12 @@ HEADERS += \
     include/raspberry_bmp280.h \
     include/settings.h \
     include/bmp280data.h\
-    src/form.h
+    src/form.h\
+    settings_pop_up.h\
 
 FORMS += \
     src/form.ui
+    settings_pop_up.ui
 
 LIBS +=  -lmosquittopp
 # Default rules for deployment.
