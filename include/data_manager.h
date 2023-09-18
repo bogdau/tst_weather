@@ -21,7 +21,7 @@ signals:
     void tempChange(double temp);
     void pressChange(double press);
 public:
-    DataManager();
+    DataManager(Settings &set);
     void class_manager(DataReading *dtrd);
     int data_manager();
     void mqtt_publish(double temp_cel, double temp_far, double pressure);
