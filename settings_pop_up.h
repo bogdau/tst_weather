@@ -5,6 +5,7 @@
 #include <QDialog>
 #include <QComboBox>
 #include <QString>
+#include "include/data_reading.h"
 #include "form.h"
 
 namespace Ui {
@@ -19,14 +20,16 @@ public:
     explicit settings_pop_up(QWidget *parent = nullptr);
     ~settings_pop_up();
 signals:
-    void on_temp_units_currentIndexChanged(QString unit);
-    void on_pressure_units_currentIndexChanged(QString unit);
+    void temp_units_currentIndexChanged(QString unit);
+    void pressure_units_currentIndexChanged(QString unit);
     void button_ok_pressed();
+
 public slots:
-    void onButtonClicked();
+    void on_button_ok_clicked();
 
 private:
     Ui::settings_pop_up *ui;
+    std::unique_ptr<DataReading> m_reader;
 };
 
 #endif // SETTINGS_POP_UP_H
