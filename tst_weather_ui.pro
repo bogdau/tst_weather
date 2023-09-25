@@ -39,7 +39,7 @@ HEADERS += \
     settings_pop_up.h\
 
 FORMS += \
-    src/form.ui
+    src/form.ui \
     settings_pop_up.ui
 
 LIBS +=  -lmosquittopp
