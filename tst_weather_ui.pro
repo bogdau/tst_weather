@@ -42,6 +42,9 @@ FORMS += \
     src/form.ui \
     settings_pop_up.ui
 
+UI_DIR = $$PWD/ui
+UI_HEADERS_DIR = $$PWD
+
 LIBS +=  -lmosquittopp
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

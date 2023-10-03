@@ -11,7 +11,7 @@ int BMP280Data::init(){
     }
 
     if (ret != 0){
-            return true;
+        return true;
     }
     else{
         return false;

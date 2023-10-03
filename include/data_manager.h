@@ -26,7 +26,7 @@ public:
     int data_manager();
     void mqtt_publish(double temp_cel, double temp_far, double pressure);
 public slots:
-    int colect_data();
+    void colect_data();
 
 };
 
