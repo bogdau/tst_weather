@@ -36,3 +36,5 @@
 /build
 
 tst_weather_ui.pro.user
+
+/ui

@@ -29,7 +29,7 @@ int DataManager::data_manager(){
 }
 
 
-int DataManager::colect_data(){
+void DataManager::colect_data(){
     DataOutput dtot;
 
     static int i = 0;

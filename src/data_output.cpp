@@ -1,9 +1,10 @@
 #include <iostream>
+#include <iomanip>
 #include <cmath>
 #include "../include/data_output.h"
 
 DataOutput::DataOutput(){}
 
 void DataOutput::print_info(double temp_cel, double temp_far, double pressure){
-    std::printf("Temperature: %.2f ℃, %.2f ℉  Pressure: %.f Pa\n",temp_cel,temp_far,pressure);
+    std::cout <<"Temperature: " <<std::setfill('0') << std::setw(5) << std::fixed << std::setprecision(2) << temp_cel << "℃ "<<  temp_far <<  "℉ Pressure: " << pressure << std::endl;
 }

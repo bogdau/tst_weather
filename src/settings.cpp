@@ -3,6 +3,9 @@
 #include <filesystem>
 #include <stdio.h>
 
+#include <sys/stat.h>
+#include <sys/types.h>
+
 using namespace boost::property_tree;
 
 Settings::Settings(){
@@ -15,6 +18,7 @@ Settings::Settings(){
 }
 
 void Settings::generateJsonFile(){
+    mkdir("config",0777);
     std::remove(json_path.c_str());
 
     pt.put("data_output_time", standart_time);
