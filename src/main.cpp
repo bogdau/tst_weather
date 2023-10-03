@@ -23,7 +23,6 @@ int main(int argc, char *argv[])
     BMP280Data *bmp_data = new BMP280Data;
     RawData *raw_data = new RawData;
 
-
     if(bmp_data->init() ==  true){
         dtrt->class_manager(raw_data);
     }
