@@ -22,7 +22,7 @@ void Settings::generateJsonFile(){
     std::remove(json_path.c_str());
 
     pt.put("data_output_time", standart_time);
-    pt.put("temperature", "℃");
+    pt.put("temperature", "°C");
     pt.put("pressure", "Pa");
 
     boost::property_tree::write_json(json_path, pt);

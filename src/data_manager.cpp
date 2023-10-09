@@ -52,7 +52,7 @@ void DataManager::mqtt_publish(double temp_cel, double temp_far, double pressure
     int rc;  
 
     std::stringstream mqtt_string_builder;
-    mqtt_string_builder  << "Temperature: " <<  std::fixed << std::setprecision(2) << temp_cel<<" ℃, "<< temp_far  <<   " ℉ "  << " Pressure: " <<  int(pressure) << " Pa" ;;
+    mqtt_string_builder  << "Temperature: " <<  std::fixed << std::setprecision(2) << temp_cel<<" °C, "<< temp_far  <<   " °F "  << " Pressure: " <<  int(pressure) << " Pa" ;;
 
     std::stringstream mqtt_string_raw_data;
     mqtt_string_raw_data << std::fixed << std::setprecision(2) << temp_cel << " " << temp_far  << " " << int(pressure);

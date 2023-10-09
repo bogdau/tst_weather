@@ -26,10 +26,10 @@ void Form::show(){
 
 void Form::takeTemp(double temp){
     currentTempUnit = set.temperature_unit;
-    if(currentTempUnit == "℃"){
+    if(currentTempUnit == "°C"){
         ui->Temp->setText(QString::number(temp));
     }
-    else if(currentTempUnit == "℉"){
+    else if(currentTempUnit == "°F"){
         ui->Temp->setText(QString::number((temp * 1.8)+32));
     }
     else{
