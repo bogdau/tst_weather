@@ -19,7 +19,6 @@ settings_pop_up::~settings_pop_up()
 
 void settings_pop_up::on_button_ok_clicked()
 {
-    std::cout << ui->temp_units->currentText().toStdString();
     emit temp_units_currentIndexChanged(ui->temp_units->currentText());
     emit pressure_units_currentIndexChanged(ui->pressure_units->currentText());
     emit button_ok_pressed();
