@@ -15,7 +15,10 @@
 #include <mutex>
 #include <thread>
 
-#include <fstream>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <unistd.h>
 #include <iostream>
 
 #include "/home/pi/sdk-workspace/aws-iot-device-sdk-cpp-v2/samples/utils/CommandLineUtils.h"
@@ -154,12 +157,11 @@ int main(int argc, char *argv[])
                 fprintf(stdout, "Message: ");
                 fwrite(byteBuf.buffer, 1, byteBuf.len, stdout);
                 
-                std::fstream json;
-                json.open("../config/config.json");
-                
-                std::string txt = byteBuf;
-                json << txt;
-
+                //create fifo file for push published information into it
+                mkfifo("/tmp/fifo", 0666);
+                int fd = open("/tmp/fifo", O_WRONLY);
+                write(fd, byteBuf.buffer, sizeof(byteBuf.len));
+                close(fd);
 
                 fprintf(stdout, "\n");
             }
