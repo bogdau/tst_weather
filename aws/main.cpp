@@ -157,11 +157,14 @@ int main(int argc, char *argv[])
                 fprintf(stdout, "Message: ");
                 fwrite(byteBuf.buffer, 1, byteBuf.len, stdout);
                 
+                std::stringstream data_input;
+                data_input << byteBuf.buffer;
                 //create fifo file for push published information into it
                 mkfifo("/tmp/fifo", 0666);
                 int fd = open("/tmp/fifo", O_WRONLY);
-                write(fd, byteBuf.buffer, sizeof(byteBuf.len));
+                write(fd, data_input.str().c_str(),byteBuf.len);
                 close(fd);
+                remove("/tmp/fifo");
 
                 fprintf(stdout, "\n");
             }
