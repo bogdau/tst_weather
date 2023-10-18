@@ -5,7 +5,7 @@
 
 #include <sys/stat.h>
 #include <sys/types.h>
-
+#include <fcntl.h>
 using namespace boost::property_tree;
 
 Settings::Settings(){

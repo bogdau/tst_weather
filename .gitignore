@@ -38,3 +38,5 @@
 tst_weather_ui.pro.user
 
 /ui
+
+/aws/build
