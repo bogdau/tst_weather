@@ -6,7 +6,6 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <fcntl.h>
-
 using namespace boost::property_tree;
 
 Settings::Settings(){
@@ -36,16 +35,6 @@ void Settings::loadSettings(){
     time = pt.get<int>("data_output_time");
     temperature_unit = pt.get<std::string>("temperature");
     pressure_unit = pt.get<std::string>("pressure");
-    int fd = open("/tmp/fifo", O_RDONLY);
-    char str1[100];
-    int rfd;
-    if ((rfd = open("/tmp/fifo", O_RDONLY|O_NONBLOCK)) < 0){
-          perror("open() error for read end");
-        if(read(fd,str1,50) != -1){
-            std::string file_data(str1,50);
-            std::cout << file_data << std::endl;
-        }
-    }
 }
 
 void Settings::saveTempSettings(std::string temp_unit){

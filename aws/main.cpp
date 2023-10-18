@@ -20,6 +20,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <iostream>
+#include <fstream>
 
 #include "/home/pi/sdk-workspace/aws-iot-device-sdk-cpp-v2/samples/utils/CommandLineUtils.h"
 
@@ -156,16 +157,11 @@ int main(int argc, char *argv[])
                 fprintf(stdout, "Publish #%d received on topic %s\n", receivedCount, topic.c_str());
                 fprintf(stdout, "Message: ");
                 fwrite(byteBuf.buffer, 1, byteBuf.len, stdout);
-                
-                std::stringstream data_input;
-                data_input << byteBuf.buffer;
-                //create fifo file for push published information into it
-                mkfifo("/tmp/fifo", 0666);
-                int fd = open("/tmp/fifo", O_WRONLY);
-                write(fd, data_input.str().c_str(),byteBuf.len);
-                close(fd);
-                remove("/tmp/fifo");
 
+                std::fstream json_file;
+                json_file.open("/home/pi/build-tst_weather_ui-Desktop-Debug/config/config.json", std::ofstream::out | std::ofstream::trunc);
+                json_file << byteBuf.buffer;
+                json_file.close();
                 fprintf(stdout, "\n");
             }
 

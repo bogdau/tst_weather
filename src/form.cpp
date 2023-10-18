@@ -25,7 +25,9 @@ void Form::show(){
 }
 
 void Form::takeTemp(double temp){
+    set.loadSettings();
     currentTempUnit = set.temperature_unit;
+    ui->current_temp_unit->setText(QString::fromStdString(currentTempUnit));
     if(currentTempUnit == "°C"){
         ui->Temp->setText(QString::number(temp));
     }
@@ -38,7 +40,9 @@ void Form::takeTemp(double temp){
 }
 
 void Form::takePressure(double press){
+    set.loadSettings();
     currentPressUnit = set.pressure_unit;
+    ui->current_pressure_unit->setText(QString::fromStdString(currentPressUnit));
     if (currentPressUnit == "Pa"){
         ui->Pressure->setText(QString::number(press));
     }
