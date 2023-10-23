@@ -39,6 +39,8 @@ int main(int argc, char *argv[])
 
     QObject::connect(dtrt.get(), &DataManager::tempChange, &main_window, &Form::takeTemp);
     QObject::connect(dtrt.get(), &DataManager::pressChange, &main_window, &Form::takePressure);
+
+    QObject::connect(&mki, &mki109v1::magneticFieldChange, &main_window, &Form::getMagneticField);
     main_window.show();
     dtrt->data_manager();
 

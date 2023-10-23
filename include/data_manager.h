@@ -18,7 +18,7 @@ private:
     std::unique_ptr<DataReading> m_reader;
     QTimer *timer;
     Settings settings;
-    mki109v1 mki;
+    mki109v1 *mki;
 signals:
     void tempChange(double temp);
     void pressChange(double press);

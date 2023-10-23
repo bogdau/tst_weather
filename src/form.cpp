@@ -66,4 +66,9 @@ void Form::handlePressUnitChange(QString unit){
     ui->current_pressure_unit->setText(unit);
 }
 
+void Form::getMagneticField(QVector<float> magneticMg){
+    ui->magnetic_x->setText(QString::number(magneticMg[0]));
+    ui->magnetic_y->setText(QString::number(magneticMg[1]));
+    ui->magnetic_z->setText(QString::number(magneticMg[2]));
+}
 
