@@ -10,6 +10,7 @@ CONFIG += c++14
 
 SOURCES += \
     driver/bmp280.cpp \
+    driver/lis3mdl_reg.c \
     src/RawData.cpp \
     src/bmp280data.cpp \
     src/data_manager.cpp \
@@ -17,6 +18,7 @@ SOURCES += \
     src/data_reading.cpp \
     src/form.cpp \
     src/main.cpp \
+    src/mki109v1.cpp \
     src/mqtt.cpp \
     src/raspberry_bmp280.cpp \
     src/settings.cpp\
@@ -26,6 +28,7 @@ SOURCES += \
 HEADERS += \
     driver/bmp280.h \
     driver/bmp280_defs.h \
+    driver/lis3mdl_reg.h \
     include/RawData.h \
     include/bmp280data.h \
     include/data_manager.h \
@@ -37,6 +40,7 @@ HEADERS += \
     include/bmp280data.h\
     src/form.h\
     settings_pop_up.h\
+    src/mki109v1.h
 
 FORMS += \
     src/form.ui \

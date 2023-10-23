@@ -10,6 +10,7 @@
 #include "include/data_manager.h"
 #include "form.h"
 #include "settings_pop_up.h"
+#include "mki109v1.h"
 
 int main(int argc, char *argv[])
 {
@@ -29,7 +30,8 @@ int main(int argc, char *argv[])
     else{
         dtrt->class_manager(bmp_data);
     }
-
+    mki109v1 v;
+    v.lis3mdl_read_data_polling();
     QObject::connect(&main_window, &Form::setting_request,&set, [&set](){set.show();} );
 
     QObject::connect(&set, &settings_pop_up::temp_units_currentIndexChanged, &main_window, &Form::handleTempUnitChange );
