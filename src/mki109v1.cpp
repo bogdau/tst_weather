@@ -96,7 +96,6 @@ void  mki109v1::lis3mdl_read_data_polling()
     static float magnetic_mG[3];
     static float temperature_degC;
     static uint8_t whoamI, rst;
-    static uint8_t tx_buffer[1000];
 
     dev_ctx.write_reg = write_register_stm;
     dev_ctx.read_reg = read_register_stm;
@@ -132,35 +131,26 @@ void  mki109v1::lis3mdl_read_data_polling()
     lis3mdl_md_t type ;
     lis3mdl_operating_mode_get(&dev_ctx, &type);
     /* Read samples in polling mode (no int) */
-    while (1) {
     uint8_t reg;
     /* Read output only if new value is available */
     lis3mdl_mag_data_ready_get(&dev_ctx, &reg);
 
     if (reg) {
-          /* Read magnetic field data */
-          memset(data_raw_magnetic, 0x00, 3 * sizeof(int16_t));
-          lis3mdl_magnetic_raw_get(&dev_ctx, data_raw_magnetic);
-          magnetic_mG[0] = 1000 * lis3mdl_from_fs16_to_gauss(
-                             data_raw_magnetic[0]);
-          magnetic_mG[1] = 1000 * lis3mdl_from_fs16_to_gauss(
-                             data_raw_magnetic[1]);
-          magnetic_mG[2] = 1000 * lis3mdl_from_fs16_to_gauss(
-                             data_raw_magnetic[2]);
-          printf("Magnetic field [mG]:%4.2f\t%4.2f\t%4.2f\n",
-                  magnetic_mG[0], magnetic_mG[1], magnetic_mG[2]);
-        //   tx_com(tx_buffer, strlen((char const *)tx_buffer));
-          /* Read temperature data */
-        //   std::cout << "Trace 4------" << std::endl;
-          memset(&data_raw_temperature, 0x00, sizeof(int16_t));
-         lis3mdl_temperature_raw_get(&dev_ctx, &data_raw_temperature);
-          temperature_degC = lis3mdl_from_lsb_to_celsius(data_raw_temperature);
-          printf( "Temperature [degC]:%6.2f\n",
-                  temperature_degC);
-//           usleep(1000*1000);
-        //   tx_com(tx_buffer, strlen((char const *)tx_buffer));
+        memset(data_raw_magnetic, 0x00, 3 * sizeof(int16_t));
+        lis3mdl_magnetic_raw_get(&dev_ctx, data_raw_magnetic);
+        magnetic_mG[0] = 1000 * lis3mdl_from_fs16_to_gauss(
+                            data_raw_magnetic[0]);
+        magnetic_mG[1] = 1000 * lis3mdl_from_fs16_to_gauss(
+                            data_raw_magnetic[1]);
+        magnetic_mG[2] = 1000 * lis3mdl_from_fs16_to_gauss(
+                            data_raw_magnetic[2]);
+        printf("Magnetic field [mG]:%4.2f X  %4.2f Y  %4.2f Z \n",
+                magnetic_mG[0], magnetic_mG[1], magnetic_mG[2]);
+        memset(&data_raw_temperature, 0x00, sizeof(int16_t));
+        lis3mdl_temperature_raw_get(&dev_ctx, &data_raw_temperature);
+        // temperature_degC = lis3mdl_from_lsb_to_celsius(data_raw_temperature);
+        // printf( "Temperature [degC]:%6.2f\n", temperature_degC);
     }
-  }
 }
 
 

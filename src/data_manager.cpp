@@ -10,8 +10,9 @@
 #include "include/settings.h"
 #include "include/mqtt.h"
 #include "form.h"
+#include "src/mki109v1.h"
 
-DataManager::DataManager(Settings &set):m_reader(nullptr),settings(set){
+DataManager::DataManager(Settings &set, mki109v1 &mki):m_reader(nullptr),settings(set),mki(mki){
     timer = new QTimer (this);
 }
 
@@ -31,7 +32,7 @@ int DataManager::data_manager(){
 
 void DataManager::colect_data(){
     DataOutput dtot;
-
+    mki.lis3mdl_read_data_polling();
     static int i = 0;
     if(i == 3){
         settings.loadSettings();
