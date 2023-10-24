@@ -94,9 +94,9 @@ void  mki109v1::lis3mdl_read_data_polling()
 {
     static int16_t data_raw_magnetic[3];
     static int16_t data_raw_temperature;
-    static QVector<float> magnetic_mG;
+    static QVector<int> magnetic_mG;
     magnetic_mG.reserve(3);
-    static float temperature_degC;
+//    static float temperature_degC;
     static uint8_t whoamI, rst;
 
     dev_ctx.write_reg = write_register_stm;
@@ -143,7 +143,7 @@ void  mki109v1::lis3mdl_read_data_polling()
         magnetic_mG.append(1000 * lis3mdl_from_fs16_to_gauss( data_raw_magnetic[0]));
         magnetic_mG.append(1000 * lis3mdl_from_fs16_to_gauss( data_raw_magnetic[1]));
         magnetic_mG.append(1000 * lis3mdl_from_fs16_to_gauss(data_raw_magnetic[2]));
-        printf("Magnetic field [mG]:%4.2f X  %4.2f Y  %4.2f Z \n",
+        printf("Magnetic field [mG]:%d X  %d Y  %d Z Gauss\n",
                 magnetic_mG[0], magnetic_mG[1], magnetic_mG[2]);
         memset(&data_raw_temperature, 0x00, sizeof(int16_t));
         lis3mdl_temperature_raw_get(&dev_ctx, &data_raw_temperature);

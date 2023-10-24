@@ -22,7 +22,7 @@ private:
     static int32_t write_register_stm (void *mhandle, uint8_t reg , const uint8_t *buf, uint16_t bufsize);
     static int32_t read_register_stm (void *mhandle, uint8_t reg ,uint8_t *buf, uint16_t bufsize);
 signals:
-    void magneticFieldChange(QVector<float>);
+    void magneticFieldChange(QVector<int>);
 public:
     mki109v1();
     void lis3mdl_read_data_polling();

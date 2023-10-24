@@ -24,7 +24,7 @@ public:
     void takePressure(double pressure);
 public slots:
     void show();
-    void getMagneticField(QVector<float>);
+    void getMagneticField(QVector<int>);
     void handleTempUnitChange(QString unit);
     void handlePressUnitChange(QString unit);
 signals:

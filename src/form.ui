@@ -107,7 +107,7 @@
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>230</x>
+     <x>200</x>
      <y>170</y>
      <width>16</width>
      <height>22</height>
@@ -120,7 +120,7 @@
   <widget class="QLabel" name="label_2">
    <property name="geometry">
     <rect>
-     <x>310</x>
+     <x>260</x>
      <y>170</y>
      <width>16</width>
      <height>22</height>
@@ -133,7 +133,7 @@
   <widget class="QLabel" name="label_3">
    <property name="geometry">
     <rect>
-     <x>390</x>
+     <x>320</x>
      <y>170</y>
      <width>16</width>
      <height>22</height>
@@ -146,9 +146,9 @@
   <widget class="QLabel" name="magnetic_z">
    <property name="geometry">
     <rect>
-     <x>330</x>
+     <x>290</x>
      <y>170</y>
-     <width>68</width>
+     <width>31</width>
      <height>22</height>
     </rect>
    </property>
@@ -161,7 +161,7 @@
     <rect>
      <x>170</x>
      <y>170</y>
-     <width>68</width>
+     <width>31</width>
      <height>22</height>
     </rect>
    </property>
@@ -172,9 +172,9 @@
   <widget class="QLabel" name="magnetic_y">
    <property name="geometry">
     <rect>
-     <x>250</x>
+     <x>230</x>
      <y>170</y>
-     <width>68</width>
+     <width>31</width>
      <height>22</height>
     </rect>
    </property>
@@ -187,12 +187,25 @@
     <rect>
      <x>20</x>
      <y>170</y>
-     <width>103</width>
-     <height>22</height>
+     <width>111</width>
+     <height>20</height>
     </rect>
    </property>
    <property name="text">
     <string> Magnetic field</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_4">
+   <property name="geometry">
+    <rect>
+     <x>360</x>
+     <y>170</y>
+     <width>68</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Gauss</string>
    </property>
   </widget>
  </widget>
