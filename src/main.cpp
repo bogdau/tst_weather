@@ -10,13 +10,15 @@
 #include "include/data_manager.h"
 #include "form.h"
 #include "settings_pop_up.h"
+#include "src/mki109v1.h"
 
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
 
     Settings settings;
-    std::unique_ptr<DataManager> dtrt = std::make_unique<DataManager>(settings);
+    mki109v1 mki;
+    std::unique_ptr<DataManager> dtrt = std::make_unique<DataManager>(settings,mki);
     Form main_window(settings);
     settings_pop_up set;
 
@@ -37,6 +39,8 @@ int main(int argc, char *argv[])
 
     QObject::connect(dtrt.get(), &DataManager::tempChange, &main_window, &Form::takeTemp);
     QObject::connect(dtrt.get(), &DataManager::pressChange, &main_window, &Form::takePressure);
+
+    QObject::connect(&mki, &mki109v1::magneticFieldChange, &main_window, &Form::getMagneticField);
     main_window.show();
     dtrt->data_manager();
 

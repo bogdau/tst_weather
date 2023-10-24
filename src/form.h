@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QString>
+#include <QVector>
 #include "include/data_manager.h"
 #include "settings_pop_up.h"
 #include "include/settings.h"
@@ -23,6 +24,7 @@ public:
     void takePressure(double pressure);
 public slots:
     void show();
+    void getMagneticField(QVector<int>);
     void handleTempUnitChange(QString unit);
     void handlePressUnitChange(QString unit);
 signals:

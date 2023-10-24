@@ -10,6 +10,7 @@ CONFIG += c++14
 
 SOURCES += \
     driver/bmp280.cpp \
+    driver/lis3mdl_reg.c \
     src/RawData.cpp \
     src/bmp280data.cpp \
     src/data_manager.cpp \
@@ -26,6 +27,7 @@ SOURCES += \
 HEADERS += \
     driver/bmp280.h \
     driver/bmp280_defs.h \
+    driver/lis3mdl_reg.h \
     include/RawData.h \
     include/bmp280data.h \
     include/data_manager.h \
