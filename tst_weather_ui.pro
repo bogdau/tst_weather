@@ -22,6 +22,7 @@ SOURCES += \
     src/raspberry_bmp280.cpp \
     src/settings.cpp\
     settings_pop_up.cpp\
+    src/mki109v1.cpp \
 
 
 HEADERS += \
@@ -39,6 +40,7 @@ HEADERS += \
     include/bmp280data.h\
     src/form.h\
     settings_pop_up.h\
+    src/mki109v1.h \
 
 FORMS += \
     src/form.ui \
