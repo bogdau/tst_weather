@@ -40,5 +40,5 @@ do_install() {
   	install -m 0644 ${WORKDIR}/aust.service ${D}/${systemd_system_unitdir}/system
 }
 
-inherit qmake5 populate_sdk_qt6_base
+inherit qmake5
 
