@@ -9,7 +9,7 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda
 SRC_URI = "git://github.com/bohdan-kharytonov/tst_weather.git;branch=dev;protocol=https "
 #SRC_URI += "file://aust.service "
 #SRC_URI = "git@github.com:bohdan-kharytonov/tst_weather.git"
-SRCREV = "4ee5093a009c20429e6dd1ccc9d62bf210a5735d"
+SRCREV = "58a655bea4d10cd3704fe959bb08f8aedec67117"
 SRC_URI[sha256sum] = "16fed98a21dbb03a8080bce8cf4ac85df11842b214e64beebab2144e6e53b4af"
 
 S = "${WORKDIR}/git"
