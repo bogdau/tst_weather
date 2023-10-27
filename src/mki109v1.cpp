@@ -10,7 +10,7 @@
 #include <cstring>
 #include <QVector>
 
-mki109v1::mki109v1():QObject(nullptr)
+mki109v1::mki109v1()
 {
     if ((i2c_fd = open(i2c_fname.c_str(), O_RDWR)) < 0) {
             char err[200];
