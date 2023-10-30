@@ -92,6 +92,7 @@ RUN git clone https://github.com/aws4embeddedlinux/meta-aws.git -b $YOCTO_RELEAS
 COPY meta-custom /poky/meta-custom
 COPY meta-image-config /poky/meta-image-config
 COPY conf/ /poky/build/conf
+COPY custom-images/ /poky/custom-images
 
 RUN chown -R dev:dev /poky
 
