@@ -17,8 +17,9 @@ mki109v1::mki109v1()
             printf(err, "open('%s') in i2c_init", i2c_fname.c_str());;
             perror(err);
         }
-         if (ioctl(i2c_fd, I2C_SLAVE, 0x1E) < 0) {
-            exit(1);
+    if (ioctl(i2c_fd, I2C_SLAVE, 0x1E) < 0) {
+            throw("Not open file /dev/i2c-1, turn on i2c on your device");
+            exit(0);
         }
 }
 
