@@ -9,6 +9,7 @@ CONFIG += c++14
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    data_base.cpp \
     driver/bmp280.cpp \
     driver/lis3mdl_reg.c \
     src/RawData.cpp \
@@ -26,6 +27,7 @@ SOURCES += \
 
 
 HEADERS += \
+    data_base.h \
     driver/bmp280.h \
     driver/bmp280_defs.h \
     driver/lis3mdl_reg.h \
@@ -49,7 +51,9 @@ FORMS += \
 UI_DIR = $$PWD/ui
 UI_HEADERS_DIR = $$PWD
 
-LIBS +=  -lmosquittopp
+LIBS += \
+    -lmosquittopp \
+    -lsqlite3
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
