@@ -84,12 +84,12 @@ void data_base::insert_table_temp_press(int temp, int pressure){
     }
 }
 
-void data_base::insert_table_magnetometr(int x, int y, int z){
+void data_base::insert_table_magnetometr(QVector<int> x){
     char* errMsg = 0;
     char insertDataSQL[100];
     snprintf(insertDataSQL, sizeof(insertDataSQL),
              "INSERT INTO MAGNETOMETR_DATA (X, Y, Z) VALUES (%d, %d, %d);",
-             x,y,z);
+             x[0],x[1],x[2]);
 
     int rc = sqlite3_exec(db, insertDataSQL, 0, 0, &errMsg);
 

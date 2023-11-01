@@ -25,7 +25,7 @@ signals:
     void magneticFieldChange(QVector<int>);
 public:
     mki109v1();
-    void lis3mdl_read_data_polling();
+    QVector<int> lis3mdl_read_data_polling();
 };
 
 #endif // MKI109V1_H

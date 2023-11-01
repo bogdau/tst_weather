@@ -2,6 +2,7 @@
 #define __DATA_BASE_H__
 #include <sqlite3.h>
 #include <iostream>
+#include <QVector>
 
 class data_base
 {
@@ -21,7 +22,7 @@ public:
     void read_table_magnetometr();
 
     void insert_table_temp_press(int,int);
-    void insert_table_magnetometr(int,int,int);
+    void insert_table_magnetometr(QVector<int>);
 };
 
 #endif // DATA_BASE_H
