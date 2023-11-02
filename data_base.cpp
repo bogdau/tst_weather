@@ -114,7 +114,7 @@ void data_base::read_table_temp_press(){
                  double pressure = sqlite3_column_double(stmt, 2);
                  const char* timestamp = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 3));
 
-                 std::cout << "ID: " << id << ", Temperature: " << temperature << ", Pressure: " << pressure << ", Timestamp: " << timestamp << std::endl;
+                 std::cout << "ID: " << id << ", Timestamp: " << timestamp  << ", Temperature: " << temperature << ", Pressure: " << pressure << std::endl;
              }
     } else {
         std::cerr << "Failed to execute query: " << sqlite3_errmsg(db) << std::endl;
@@ -136,7 +136,7 @@ void data_base::read_table_magnetometr(){
            double z = sqlite3_column_double(stmt, 3);
            const char* timestamp = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 4));
 
-           std::cout << "ID: " << id << ", x: " << x << ", y: " << y << ", z: " << z << ", Timestamp: " << timestamp << std::endl;
+           std::cout << "ID: "<< id << ", Timestamp: " << timestamp  << ", x: " << x << ", y: " << y << ", z: " << z << std::endl;
        }
        sqlite3_finalize(stmt); // Clean up the prepared statement
     } else {
