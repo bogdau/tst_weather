@@ -10,61 +10,53 @@ void data_base::open_table_temp_press(){
     int rc = sqlite3_open(table_temp_press.c_str(), &db);
        if (rc) {
            std::cerr << "Can't open database: " << sqlite3_errmsg(db) << std::endl;
-           create_table_temp_press();
            exit(0);
        } else {
            std::cout << "Opened database successfully" << std::endl;
+
+            char* errMsg = 0;
+            const char* createTableSQL = "CREATE TABLE IF NOT EXISTS TEMPERATURE_PRESSURE_DATA("
+                                        "ID INTEGER PRIMARY KEY AUTOINCREMENT,"
+                                        "TEMPERATURE REAL NOT NULL,"
+                                        "PRESSURE REAL NOT NULL,"
+                                        "TIMESTAMP DATETIME DEFAULT CURRENT_TIMESTAMP);";
+
+            int rc = sqlite3_exec(db, createTableSQL, 0, 0, &errMsg);
+
+            if (rc != SQLITE_OK) {
+               std::cerr << "SQL error: " << errMsg << std::endl;
+               sqlite3_free(errMsg);
+            } else {
+               std::cout << "Table created successfully" << std::endl;
+            }
        }
-           create_table_temp_press();
 }
 
 void data_base::open_table_magnetometr(){
     int rc = sqlite3_open(table_magnetometr.c_str(), &db);
        if (rc) {
            std::cerr << "Can't open database: " << sqlite3_errmsg(db) << std::endl;
-           create_table_magnetometr();
            exit(0);
        } else {
            std::cout << "Opened database successfully" << std::endl;
+
+           char* errMsg = 0;
+           const char* createTableSQL = "CREATE TABLE IF NOT EXISTS MAGNETOMETR_DATA("
+                                        "ID INTEGER PRIMARY KEY AUTOINCREMENT,"
+                                        "x REAL NOT NULL,"
+                                        "y REAL NOT NULL,"
+                                        "z REAL NOT NULL,"
+                                        "TIMESTAMP DATETIME DEFAULT CURRENT_TIMESTAMP);";
+
+           int rc = sqlite3_exec(db, createTableSQL, 0, 0, &errMsg);
+
+           if (rc != SQLITE_OK) {
+               std::cerr << "SQL error: " << errMsg << std::endl;
+               sqlite3_free(errMsg);
+           } else {
+               std::cout << "Table created successfully" << std::endl;
+           }
        }
-           create_table_magnetometr();
-}
-
-void data_base::create_table_temp_press(){
-    char* errMsg = 0;
-    const char* createTableSQL = "CREATE TABLE IF NOT EXISTS TEMPERATURE_PRESSURE_DATA("
-                                 "ID INTEGER PRIMARY KEY AUTOINCREMENT,"
-                                 "TEMPERATURE REAL NOT NULL,"
-                                 "PRESSURE REAL NOT NULL,"
-                                 "TIMESTAMP DATETIME DEFAULT CURRENT_TIMESTAMP);";
-
-    int rc = sqlite3_exec(db, createTableSQL, 0, 0, &errMsg);
-
-    if (rc != SQLITE_OK) {
-        std::cerr << "SQL error: " << errMsg << std::endl;
-        sqlite3_free(errMsg);
-    } else {
-        std::cout << "Table created successfully" << std::endl;
-    }
-}
-
-void data_base::create_table_magnetometr(){
-    char* errMsg = 0;
-    const char* createTableSQL = "CREATE TABLE IF NOT EXISTS MAGNETOMETR_DATA("
-                                 "ID INTEGER PRIMARY KEY AUTOINCREMENT,"
-                                 "x REAL NOT NULL,"
-                                 "y REAL NOT NULL,"
-                                 "z REAL NOT NULL,"
-                                 "TIMESTAMP DATETIME DEFAULT CURRENT_TIMESTAMP);";
-
-    int rc = sqlite3_exec(db, createTableSQL, 0, 0, &errMsg);
-
-    if (rc != SQLITE_OK) {
-        std::cerr << "SQL error: " << errMsg << std::endl;
-        sqlite3_free(errMsg);
-    } else {
-        std::cout << "Table created successfully" << std::endl;
-    }
 }
 
 void data_base::insert_table_temp_press(int temp, int pressure){
