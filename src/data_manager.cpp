@@ -11,6 +11,7 @@
 #include "include/mqtt.h"
 #include "form.h"
 #include "src/mki109v1.h"
+#include "data_base.h"
 
 DataManager::DataManager(Settings &set, mki109v1 &mki):m_reader(nullptr),settings(set),mki(&mki){
     timer = new QTimer (this);
@@ -23,6 +24,9 @@ void DataManager::class_manager(DataReading *dtrd){
 int DataManager::data_manager(){
     settings.loadSettings();
 
+    db_temp.open_table_temp_press();
+    db_mag.open_table_magnetometr();
+
     timer->setInterval(settings.getSensorPollIntervalMs());
     connect(timer, &QTimer::timeout, this, &DataManager::colect_data);
     timer->start();
@@ -32,6 +36,13 @@ int DataManager::data_manager(){
 
 void DataManager::colect_data(){
     DataOutput dtot;
+
+    db_temp.insert_table_temp_press(m_reader->readTemp(), m_reader->readPressure());
+    db_temp.read_table_temp_press();
+
+    db_mag.insert_table_magnetometr(mki->lis3mdl_read_data_polling());
+    db_mag.read_table_magnetometr();
+
     mki->lis3mdl_read_data_polling();
     static int i = 0;
     if(i == 3){

@@ -91,11 +91,12 @@ void  mki109v1::delay_stm (uint32_t millisec){
     usleep(millisec * 1000);
 }
 
-void  mki109v1::lis3mdl_read_data_polling()
+QVector<int>  mki109v1::lis3mdl_read_data_polling()
 {
     static int16_t data_raw_magnetic[3];
     static int16_t data_raw_temperature;
     static QVector<int> magnetic_mG;
+    magnetic_mG.clear();
     magnetic_mG.reserve(3);
 //    static float temperature_degC;
     static uint8_t whoamI, rst;
@@ -151,8 +152,8 @@ void  mki109v1::lis3mdl_read_data_polling()
         // temperature_degC = lis3mdl_from_lsb_to_celsius(data_raw_temperature);
         // printf( "Temperature [degC]:%6.2f\n", temperature_degC);
         emit magneticFieldChange(magnetic_mG);
-        magnetic_mG.clear();
     }
+    return magnetic_mG;
 }
 
 

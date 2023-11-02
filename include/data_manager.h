@@ -9,6 +9,7 @@
 #include "include/data_reading.h"
 #include "include/settings.h"
 #include "src/mki109v1.h"
+#include "data_base.h"
 
 class DataManager : public QObject
 {
@@ -19,6 +20,8 @@ private:
     QTimer *timer;
     Settings settings;
     mki109v1 *mki;
+    data_base db_mag;
+    data_base db_temp;
 signals:
     void tempChange(double temp);
     void pressChange(double press);
