@@ -60,6 +60,7 @@ LIBS += \
     -lsqlite3 \
     -laws-crt-cpp \
     -laws-c-common \
+    -lcrypto \
 
 
 # Default rules for deployment.

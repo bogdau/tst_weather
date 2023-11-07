@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QApplication>
 #include <QPushButton>
+#include <thread> 
 
 #include "include/bmp280data.h"
 #include "include/RawData.h"
@@ -11,13 +12,19 @@
 #include "form.h"
 #include "settings_pop_up.h"
 #include "src/mki109v1.h"
+#include "aws.h"
 
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
+    
+    aws a;
+    a.connect(argc,argv);
 
     Settings settings;
     mki109v1 mki;
+    
+
     std::unique_ptr<DataManager> dtrt = std::make_unique<DataManager>(settings,mki);
     Form main_window(settings);
     settings_pop_up set;
