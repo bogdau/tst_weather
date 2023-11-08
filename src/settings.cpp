@@ -56,3 +56,22 @@ void Settings::savePressSettings(std::string press_unit){
 int Settings::getSensorPollIntervalMs(){
     return int(time);
 }
+
+void Settings::loadFromJson(std::stringstream& data){
+     if(data.str() == "temperature:C"){
+        std::cout << "TEMPERATURE C SET" << std::endl;
+        saveTempSettings("°C");
+    }
+    else if(data.str() == "temperature:F"){
+        saveTempSettings("°F");
+    }
+    else if(data.str() == "pressure:Pa"){
+        savePressSettings("Pa");
+    }
+    else if(data.str() == "pressure:ATM"){
+        savePressSettings("ATM");
+    }
+    else{
+        std::cout << "unrecognize" << std::endl;
+    }
+}

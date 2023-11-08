@@ -21,9 +21,10 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
     ApiHandle apiHandle;
     aws a;
-    a.connect();
-
     Settings settings;
+    a.connect();
+    a.subscribe([&](std::stringstream data){settings.loadFromJson(data);});
+
     mki109v1 mki;
     
 

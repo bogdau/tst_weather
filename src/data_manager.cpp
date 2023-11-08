@@ -38,10 +38,10 @@ void DataManager::colect_data(){
     DataOutput dtot;
 
     db_temp.insert_table_temp_press(m_reader->readTemp(), m_reader->readPressure());
-    db_temp.read_table_temp_press();
+    //db_temp.read_table_temp_press();
 
     db_mag.insert_table_magnetometr(mki->lis3mdl_read_data_polling());
-    db_mag.read_table_magnetometr();
+    //db_mag.read_table_magnetometr();
 
     mki->lis3mdl_read_data_polling();
     static int i = 0;

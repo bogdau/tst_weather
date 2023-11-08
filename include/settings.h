@@ -21,6 +21,7 @@ public:
     void saveTempSettings(std::string temp_unit);
     void savePressSettings(std::string press_unit);
     int getSensorPollIntervalMs();
+    void loadFromJson(std::stringstream&);
 };
 
 #endif /* __SETTINGS_H__ */
