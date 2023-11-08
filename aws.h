@@ -27,14 +27,15 @@ using namespace Aws::Crt;
 class aws
 {
 private:
-    void  onConnectionCompleted(Aws::Crt::Mqtt::MqttConnection &, int errorCode, Aws::Crt::Mqtt::ReturnCode returnCode, bool);
+    void onConnectionCompleted(Aws::Crt::Mqtt::MqttConnection &, int errorCode, Aws::Crt::Mqtt::ReturnCode returnCode, bool);
     void onInterrupted(Aws::Crt::Mqtt::MqttConnection &, int error);
     void onResumed(Aws::Crt::Mqtt::MqttConnection &, Aws::Crt::Mqtt::ReturnCode, bool);
     void onDisconnect(Aws::Crt::Mqtt::MqttConnection &);
     // Utils::cmdData cmdData;
     // ApiHandle apiHandle;
-    // std::promise<bool> connectionCompletedPromise;
-    // std::promise<void> connectionClosedPromise;
+    std::promise<bool> connectionCompletedPromise;
+    std::promise<void> connectionClosedPromise;
+    std::shared_ptr<Aws::Crt::Mqtt::MqttConnection> connection;
 public:
     aws();
     // int aws_start(int, char*[]);
@@ -42,8 +43,8 @@ public:
     // void mqtt_builder();
     // void ReceivedMessage();
     // void subscribeToTopic();
-    void connect(int, char*[]);
-    void publish(std::string, std::string);
+    void connect();
+    void subscribe(std::string, std::string);
 };
 
 #endif // AWS_H

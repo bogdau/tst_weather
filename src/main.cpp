@@ -14,12 +14,14 @@
 #include "src/mki109v1.h"
 #include "aws.h"
 
+#include <aws/crt/Api.h>
+
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
-    
+    ApiHandle apiHandle;
     aws a;
-    a.connect(argc,argv);
+    a.connect();
 
     Settings settings;
     mki109v1 mki;

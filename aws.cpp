@@ -220,14 +220,14 @@ aws::aws()
 // }
 
 
-void aws::connect(int argc, char *argv[]){
+void aws::connect(){
     std::ifstream root_ca_file("credentials/root-CA.crt", std::ios::binary);
     std::stringstream root_ca;
     root_ca << root_ca_file.rdbuf();
       /************************ Setup ****************************/
 
     // Do the global initialization for the API.
-    ApiHandle apiHandle;
+
 
     /**
      * cmdData is the arguments/input from the command line placed into a single struct for
@@ -251,7 +251,7 @@ void aws::connect(int argc, char *argv[]){
         exit(-1);
     }
     Aws::Iot::MqttClient client = Aws::Iot::MqttClient();
-    auto connection = client.NewConnection(clientConfig);
+    connection = client.NewConnection(clientConfig);
     if (!*connection)
     {
         fprintf(
@@ -260,63 +260,90 @@ void aws::connect(int argc, char *argv[]){
             Aws::Crt::ErrorDebugString(connection->LastError()));
         exit(-1);
     }
-
-    /**
-     * In a real world application you probably don't want to enforce synchronous behavior
-     * but this is a sample console application, so we'll just do that with a condition variable.
-     */
-    std::promise<bool> connectionCompletedPromise;
-    std::promise<void> connectionClosedPromise;
-
-    // Invoked when a MQTT connect has completed or failed
-    // auto onConnectionCompleted =
-    //     [&](Aws::Crt::Mqtt::MqttConnection &, int errorCode, Aws::Crt::Mqtt::ReturnCode returnCode, bool) {
-    //         if (errorCode)
-    //         {
-    //             fprintf(stdout, "Connection failed with error %s\n", Aws::Crt::ErrorDebugString(errorCode));
-    //             connectionCompletedPromise.set_value(false);
-    //         }
-    //         else
-    //         {
-    //             fprintf(stdout, "Connection completed with return code %d\n", returnCode);
-    //             connectionCompletedPromise.set_value(true);
-    //         }
-    //     };
-
-    // Invoked when a MQTT connection was interrupted/lost
-    auto onInterrupted = [&](Aws::Crt::Mqtt::MqttConnection &, int error) {
-        fprintf(stdout, "Connection interrupted with error %s\n", Aws::Crt::ErrorDebugString(error));
-    };
-
-    // Invoked when a MQTT connection was interrupted/lost, but then reconnected successfully
-    auto onResumed = [&](Aws::Crt::Mqtt::MqttConnection &, Aws::Crt::Mqtt::ReturnCode, bool) {
-        fprintf(stdout, "Connection resumed\n");
-    };
-
-    // Invoked when a disconnect message has completed.
-    auto onDisconnect = [&](Aws::Crt::Mqtt::MqttConnection &) {
-        fprintf(stdout, "Disconnect completed\n");
-        connectionClosedPromise.set_value();
-    };
-
-    // Assign callbacks
-
-    connection->OnConnectionCompleted = std::bind(&aws::onConnectionCompleted, this, std::placeholders::_1,std::placeholders::_2,std::placeholders::_3,std::placeholders::_4);
-    connection->OnDisconnect = std::move(onDisconnect);
-    connection->OnConnectionInterrupted = std::move(onInterrupted);
-    connection->OnConnectionResumed = std::move(onResumed);
-
+    
+    connection->OnConnectionCompleted = 
+        std::bind(&aws::onConnectionCompleted, (this), std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4);
+    //connection->OnDisconnect = std::bind(&aws::onDisconnect,std::placeholders::_1);
+    connection->OnConnectionInterrupted = std::bind(&aws::onInterrupted,this,std::placeholders::_1,std::placeholders::_2);
+    // connection->OnConnectionResumed = std::bind(&aws::onResumed,this,std::placeholders::_1,std::placeholders::_2,std::placeholders::_3);
+      if (!connection->Connect("basicPubSub", false /*cleanSession*/, 1000 /*keepAliveTimeSecs*/))
+    {
+        fprintf(stderr, "MQTT Connection failed with error %s\n", ErrorDebugString(connection->LastError()));
+        exit(-1);
+    }
 }
 
 void aws::onConnectionCompleted(Aws::Crt::Mqtt::MqttConnection &, int errorCode, Aws::Crt::Mqtt::ReturnCode returnCode, bool){
      if (errorCode)
             {
                 fprintf(stdout, "Connection failed with error %s\n", Aws::Crt::ErrorDebugString(errorCode));
-
+                connectionCompletedPromise.set_value(false);
             }
             else
             {
                 fprintf(stdout, "Connection completed with return code %d\n", returnCode);
-            
+                connectionCompletedPromise.set_value(true);
             }
+}
+
+ void onResumed(Aws::Crt::Mqtt::MqttConnection &, Aws::Crt::Mqtt::ReturnCode, bool){
+    fprintf(stdout, "Connection resumed\n");
+ }
+
+void aws::onInterrupted(Aws::Crt::Mqtt::MqttConnection &, int error){
+    fprintf(stdout, "Connection interrupted with error %s\n", Aws::Crt::ErrorDebugString(error));
+}
+
+void aws::onDisconnect(Aws::Crt::Mqtt::MqttConnection &){
+    fprintf(stdout, "Disconnect completed\n");
+    connectionClosedPromise.set_value();
+}
+
+
+void aws::subscribe(std::string example2, std::string example1){
+    if (connectionCompletedPromise.get_future().get())
+    {
+        // std::mutex receiveMutex;
+        uint32_t receivedCount = 0;
+
+        // This is invoked upon the receipt of a Publish on a subscribed topic.
+        auto onMessage = [&](Mqtt::MqttConnection &,
+                             const String &topic,
+                             const ByteBuf &byteBuf,
+                             bool /*dup*/,
+                             Mqtt::QOS /*qos*/,
+                             bool /*retain*/) {
+            {
+                // std::lock_guard<std::mutex> lock(receiveMutex);
+                ++receivedCount;
+                fprintf(stdout, "received from topic %s\n", topic.c_str());
+                fprintf(stdout, "Message: ");
+                fwrite(byteBuf.buffer, 1, byteBuf.len, stdout);
+                fprintf(stdout, "\n");
+            }
+        };
+        auto onSubAck =
+            [&](Mqtt::MqttConnection &, uint16_t packetId, const String &topic, Mqtt::QOS QoS, int errorCode) {
+                if (errorCode)
+                {
+                    fprintf(stderr, "Subscribe failed with error %s\n", aws_error_debug_str(errorCode));
+                    exit(-1);
+                }
+                else
+                {
+                    if (!packetId || QoS == AWS_MQTT_QOS_FAILURE)
+                    {
+                        fprintf(stderr, "Subscribe rejected by the broker.");
+                        exit(-1);
+                    }
+                    else
+                    {
+                        fprintf(stdout, "Subscribe on topic %s on packetId %d Succeeded\n", topic.c_str(), packetId);
+                    }
+                }
+            };
+        connection->Subscribe("sdk/config", AWS_MQTT_QOS_AT_LEAST_ONCE, onMessage, onSubAck);
+        // Subscribe for incoming publish messages on topic.
+        // std::promise<void> subscribeFinishedPromise;
+    }
 }
