@@ -135,3 +135,20 @@ void data_base::read_table_magnetometr(){
        std::cerr << "Failed to execute query: " << sqlite3_errmsg(db) << std::endl;
     }
 }
+
+void data_base::delete_table_temp_press(){
+        char* errorMessage = nullptr;
+        int rc = sqlite3_open("temperature_pressure.db", &db);
+        const char* sql = "DELETE FROM TEMPERATURE_PRESSURE_DATA;";
+
+        rc = sqlite3_exec(db, sql, 0, 0, &errorMessage);
+
+        if (rc != SQLITE_OK) {
+            std::cerr << "SQL error: " << errorMessage << std::endl;
+            sqlite3_free(errorMessage);
+        } else {
+            std::cout << "All tables cleared successfully" << std::endl;
+        }
+
+        // sqlite3_close(db);
+}

@@ -103,10 +103,10 @@ void aws::subscribe(std::string topic,std::function<void(std::string)> callBack)
             {
                 // // std::lock_guard<std::mutex> lock(receiveMutex);
                 // ++receivedCount;
-                // fprintf(stdout, "received from topic %s\n", topic.c_str());
-                // fprintf(stdout, "Message: ");
-                // fwrite(byteBuf.buffer, 1, byteBuf.len, stdout);
-                // fprintf(stdout, "\n");
+                fprintf(stdout, "received from topic %s\n", topic.c_str());
+                fprintf(stdout, "Message: ");
+                fwrite(byteBuf.buffer, 1, byteBuf.len, stdout);
+                fprintf(stdout, "\n");
                 callBack(std::string((const char*)byteBuf.buffer));
             }
         };
@@ -137,9 +137,9 @@ void aws::subscribe(std::string topic,std::function<void(std::string)> callBack)
     }
 }
 
-void aws::publish(std::string messagePayload){
+void aws::publish(std::string topic,std::string messagePayload){
     ByteBuf payload = ByteBufFromArray((const uint8_t *)messagePayload.data(), messagePayload.length());
 
     auto onPublishComplete = [](Mqtt::MqttConnection &, uint16_t, int) {};
-    connection->Publish("sdk/config", AWS_MQTT_QOS_AT_LEAST_ONCE, false, payload, onPublishComplete);
+    connection->Publish(topic.c_str(), AWS_MQTT_QOS_AT_LEAST_ONCE, false, payload, onPublishComplete);
 }

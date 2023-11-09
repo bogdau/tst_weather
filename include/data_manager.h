@@ -10,6 +10,7 @@
 #include "include/settings.h"
 #include "src/mki109v1.h"
 #include "data_base.h"
+#include "aws.h"
 
 class DataManager : public QObject
 {
@@ -30,6 +31,7 @@ public:
     void class_manager(DataReading *dtrd);
     int data_manager();
     void mqtt_publish(double temp_cel, double temp_far, double pressure);
+    void command_selector(std::string&, aws&);
 public slots:
     void colect_data();
 

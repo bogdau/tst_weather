@@ -59,6 +59,30 @@ void DataManager::colect_data(){
     dtot.print_info(m_reader->readTemp(),(m_reader->readTemp() * 1.8) + 32,m_reader->readPressure());
 }
 
+
+void DataManager::command_selector(std::string& data,aws& a){
+     if(data == "temperature:C"){
+        std::cout << "TEMPERATURE C SET" << std::endl;
+        settings.saveTempSettings("°C");
+    }
+    else if(data == "temperature:F"){
+        settings.saveTempSettings("°F");
+    }
+    else if(data == "pressure:Pa"){
+        settings.savePressSettings("Pa");
+    }
+    else if(data == "pressure:ATM"){
+        settings.savePressSettings("ATM");
+    }
+    else if(data == "database:clear"){
+        db_temp.delete_table_temp_press();
+    }
+    else{
+        std::cout << "unrecognize" << std::endl;
+    }
+}
+
+
 void DataManager::mqtt_publish(double temp_cel, double temp_far, double pressure){
     class mqtt_client *iot_client;
     int rc;  

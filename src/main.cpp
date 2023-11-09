@@ -21,13 +21,13 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
     ApiHandle apiHandle;
     aws a;
-    Settings settings;
-    a.connect();
-    a.subscribe("sdk/config",[&](std::string data){settings.loadFromJson(data,*a);});
     mki109v1 mki;
+    Settings settings;
     
 
     std::unique_ptr<DataManager> dtrt = std::make_unique<DataManager>(settings,mki);
+    a.connect();
+    a.subscribe("sdk/test/python",[&](std::string data){dtrt->command_selector(data,a);});
     Form main_window(settings);
     settings_pop_up set;
 

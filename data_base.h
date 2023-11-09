@@ -23,6 +23,9 @@ public:
 
     void insert_table_temp_press(int,int);
     void insert_table_magnetometr(QVector<int>);
+
+    void delete_table_temp_press();
+    void delete_table_magnetometr();
 };
 
 #endif // DATA_BASE_H
