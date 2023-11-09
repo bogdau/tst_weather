@@ -6,6 +6,8 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <fcntl.h>
+#include <sqlite3.h>
+#include <data_base.h>
 using namespace boost::property_tree;
 
 Settings::Settings(){
@@ -57,7 +59,7 @@ int Settings::getSensorPollIntervalMs(){
     return int(time);
 }
 
-void Settings::loadFromJson(std::string& data){
+void Settings::loadFromJson(std::string& data,aws& a){
      if(data == "temperature:C"){
         std::cout << "TEMPERATURE C SET" << std::endl;
         saveTempSettings("°C");

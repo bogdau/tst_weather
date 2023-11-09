@@ -47,6 +47,7 @@ public:
     // void subscribeToTopic();
     void connect();
     void subscribe(std::string ,std::function<void(std::string)>);
+    void publish(std::string);
 };
 
 #endif // AWS_H

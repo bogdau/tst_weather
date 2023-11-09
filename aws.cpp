@@ -136,3 +136,10 @@ void aws::subscribe(std::string topic,std::function<void(std::string)> callBack)
         // std::promise<void> subscribeFinishedPromise;
     }
 }
+
+void aws::publish(std::string messagePayload){
+    ByteBuf payload = ByteBufFromArray((const uint8_t *)messagePayload.data(), messagePayload.length());
+
+    auto onPublishComplete = [](Mqtt::MqttConnection &, uint16_t, int) {};
+    connection->Publish("sdk/config", AWS_MQTT_QOS_AT_LEAST_ONCE, false, payload, onPublishComplete);
+}

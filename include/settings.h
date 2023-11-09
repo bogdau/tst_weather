@@ -3,6 +3,7 @@
 
 #include "boost/property_tree/ptree.hpp"
 #include <boost/property_tree/json_parser.hpp>
+#include <aws.h>
 
 class Settings{
 private:
@@ -21,7 +22,7 @@ public:
     void saveTempSettings(std::string temp_unit);
     void savePressSettings(std::string press_unit);
     int getSensorPollIntervalMs();
-    void loadFromJson(std::string&);
+    void loadFromJson(std::string&, aws&);
 };
 
 #endif /* __SETTINGS_H__ */
