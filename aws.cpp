@@ -88,9 +88,10 @@ void aws::onDisconnect(Aws::Crt::Mqtt::MqttConnection &){
 }
 
 
-void aws::subscribe(std::function<void(std::stringstream)> callBack){
+void aws::subscribe(std::string topic,std::function<void(std::string)> callBack){
     if (connectionCompletedPromise.get_future().get())
     {
+        std::stringstream input_command;
         // std::mutex receiveMutex;
         uint32_t receivedCount = 0;
         // This is invoked upon the receipt of a Publish on a subscribed topic.
@@ -103,14 +104,17 @@ void aws::subscribe(std::function<void(std::stringstream)> callBack){
             {
                 // // std::lock_guard<std::mutex> lock(receiveMutex);
                 // ++receivedCount;
-                // fprintf(stdout, "received from topic %s\n", topic.c_str());
-                // fprintf(stdout, "Message: ");
-                // fwrite(byteBuf.buffer, 1, byteBuf.len, stdout);
-                // fprintf(stdout, "\n");
-                input_command << byteBuf.buffer;
+                fprintf(stdout, "received from topic %s\n", topic.c_str());
+                fprintf(stdout, "Message: ");
+                fwrite(byteBuf.buffer, 1, byteBuf.len, stdout);
+                fprintf(stdout, "\n");
+                // std::string temp_input_data(byteBuf.buffer,byteBuf.len);
+                std::cout << "TRACE _---_" << std::endl;
+//                input_command << byteBuf.buffer;
+                std::cout << "TRACE ^^^" << std::endl;
                 // command_selector();
-                // input_command.str("");
-                callBack(input_command);
+                input_command.str("");
+                callBack(std::string((const char*)byteBuf.buffer));
             }
         };
         auto onSubAck =
@@ -133,28 +137,29 @@ void aws::subscribe(std::function<void(std::stringstream)> callBack){
                     }
                 }
             };
-        connection->Subscribe("sdk/config", AWS_MQTT_QOS_AT_LEAST_ONCE, onMessage, onSubAck);
+        
+        connection->Subscribe(topic.c_str(), AWS_MQTT_QOS_AT_LEAST_ONCE, onMessage, onSubAck);
         // Subscribe for incoming publish messages on topic.
         // std::promise<void> subscribeFinishedPromise;
     }
 }
 
-void aws::command_selector(){
-    Settings s;
-    if(input_command.str() == "temperature:C"){
-        std::cout << "TEMPERATURE C SET" << std::endl;
-        s.saveTempSettings("°C");
-    }
-    else if(input_command.str() == "temperature:F"){
-        s.saveTempSettings("°F");
-    }
-    else if(input_command.str() == "pressure:Pa"){
-        s.savePressSettings("Pa");
-    }
-    else if(input_command.str() == "pressure:ATM"){
-        s.savePressSettings("ATM");
-    }
-    else{
-        std::cout << "unrecognize" << std::endl;
-    }
-}
+//void aws::command_selector(){
+//    Settings s;
+//    if(input_command.str() == "temperature:C"){
+//        std::cout << "TEMPERATURE C SET" << std::endl;
+//        s.saveTempSettings("°C");
+//    }
+//    else if(input_command.str() == "temperature:F"){
+//        s.saveTempSettings("°F");
+//    }
+//    else if(input_command.str() == "pressure:Pa"){
+//        s.savePressSettings("Pa");
+//    }
+//    else if(input_command.str() == "pressure:ATM"){
+//        s.savePressSettings("ATM");
+//    }
+//    else{
+//        std::cout << "unrecognize" << std::endl;
+//    }
+//}

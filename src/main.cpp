@@ -23,7 +23,8 @@ int main(int argc, char *argv[])
     aws a;
     Settings settings;
     a.connect();
-    a.subscribe([&](std::stringstream data){settings.loadFromJson(data);});
+    a.subscribe("sdk/config",[&](std::string data){settings.loadFromJson(data);});
+//    a.subscribe(settings.loadFromJson("temperature:F") );
 
     mki109v1 mki;
     

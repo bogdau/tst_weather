@@ -57,18 +57,18 @@ int Settings::getSensorPollIntervalMs(){
     return int(time);
 }
 
-void Settings::loadFromJson(std::stringstream& data){
-     if(data.str() == "temperature:C"){
+void Settings::loadFromJson(std::string& data){
+     if(data == "temperature:C"){
         std::cout << "TEMPERATURE C SET" << std::endl;
         saveTempSettings("°C");
     }
-    else if(data.str() == "temperature:F"){
+    else if(data == "temperature:F"){
         saveTempSettings("°F");
     }
-    else if(data.str() == "pressure:Pa"){
+    else if(data == "pressure:Pa"){
         savePressSettings("Pa");
     }
-    else if(data.str() == "pressure:ATM"){
+    else if(data == "pressure:ATM"){
         savePressSettings("ATM");
     }
     else{

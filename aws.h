@@ -37,7 +37,7 @@ private:
     std::promise<void> connectionClosedPromise;
     std::shared_ptr<Aws::Crt::Mqtt::MqttConnection> connection;
     void command_selector();
-    std::stringstream input_command;
+    
 public:
     aws();
     // int aws_start(int, char*[]);
@@ -46,7 +46,7 @@ public:
     // void ReceivedMessage();
     // void subscribeToTopic();
     void connect();
-    void subscribe(std::function<void(std::stringstream)>);
+    void subscribe(std::string ,std::function<void(std::string)>);
 };
 
 #endif // AWS_H
