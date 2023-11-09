@@ -24,7 +24,6 @@ int main(int argc, char *argv[])
     Settings settings;
     a.connect();
     a.subscribe("sdk/config",[&](std::string data){settings.loadFromJson(data);});
-//    a.subscribe(settings.loadFromJson("temperature:F") );
 
     mki109v1 mki;
     
