@@ -75,7 +75,12 @@ void DataManager::command_selector(std::string& data,aws& a){
         settings.savePressSettings("ATM");
     }
     else if(data == "database:clear"){
-        db_temp.delete_table_temp_press();
+        db_temp.clear_table_temp_press();
+        db_mag.clear_table_magnetometr();
+    }
+    else if(data == "database:load"){
+        a.publish("sdk/test/python", "Tempreture and Pressure:\n" + db_temp.read_table_temp_press());
+        a.publish("sdk/test/python","Magnetometr:\n" + db_mag.read_table_magnetometr());
     }
     else{
         std::cout << "unrecognize" << std::endl;
