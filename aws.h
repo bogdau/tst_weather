@@ -28,26 +28,16 @@ class aws
 {
 private:
     void onConnectionCompleted(Aws::Crt::Mqtt::MqttConnection &, int errorCode, Aws::Crt::Mqtt::ReturnCode returnCode, bool);
-    void onInterrupted(Aws::Crt::Mqtt::MqttConnection &, int error);
-    void onResumed(Aws::Crt::Mqtt::MqttConnection &, Aws::Crt::Mqtt::ReturnCode, bool);
-    void onDisconnect(Aws::Crt::Mqtt::MqttConnection &);
-    // Utils::cmdData cmdData;
-    // ApiHandle apiHandle;
     std::promise<bool> connectionCompletedPromise;
     std::promise<void> connectionClosedPromise;
     std::shared_ptr<Aws::Crt::Mqtt::MqttConnection> connection;
     void command_selector();
-    
+
 public:
     aws();
-    // int aws_start(int, char*[]);
-    // void mqtt_connect();
-    // void mqtt_builder();
-    // void ReceivedMessage();
-    // void subscribeToTopic();
     void connect();
-    void subscribe(std::string ,std::function<void(std::string)>);
-    void publish(std::string,std::string);
+    void subscribe(std::string, std::function<void(std::string)>);
+    void publish(std::string, std::string);
 };
 
 #endif // AWS_H
