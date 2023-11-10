@@ -69,9 +69,6 @@ void aws::subscribe(std::string topic, std::function<void(std::string)> callBack
                              Mqtt::QOS,
                              bool)
         {
-            fprintf(stdout, "Message: ");
-            fwrite(byteBuf.buffer, 1, byteBuf.len, stdout);
-            fprintf(stdout, "\n");
             callBack(std::string((const char *)byteBuf.buffer));
         };
         auto onSubAck =
