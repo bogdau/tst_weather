@@ -72,9 +72,10 @@ void data_base::insert_table_temp_press(int temp, int pressure){
     if (rc != SQLITE_OK) {
         std::cerr << "SQL error: " << errMsg << std::endl;
         sqlite3_free(errMsg);
-    } else {
-        std::cout << "Record inserted successfully" << std::endl;
-    }
+    } 
+    // else {
+    //     std::cout << "Record inserted successfully" << std::endl;
+    // }
 }
 
 void data_base::insert_table_magnetometr(QVector<int> x){
@@ -89,9 +90,10 @@ void data_base::insert_table_magnetometr(QVector<int> x){
     if (rc != SQLITE_OK) {
         std::cerr << "SQL error: " << errMsg << std::endl;
         sqlite3_free(errMsg);
-    } else {
-        std::cout << "Record inserted successfully" << std::endl;
-    }
+    } 
+    // else {
+    //     std::cout << "Record inserted successfully" << std::endl;
+    // }
 }
 
 std::string data_base::read_table_temp_press(){

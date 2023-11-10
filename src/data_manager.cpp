@@ -61,22 +61,30 @@ void DataManager::colect_data(){
 
 
 void DataManager::command_selector(std::string& data,aws& a){
-     if(data == "temperature:C"){
-        std::cout << "TEMPERATURE C SET" << std::endl;
+    if(data == "temperature:C"){
+        std::cout << "the temperature measurement is set to Celsius" << std::endl;
         settings.saveTempSettings("°C");
     }
     else if(data == "temperature:F"){
+        std::cout << "the temperature measurement is set to Fahrenheit" << std::endl;
         settings.saveTempSettings("°F");
     }
     else if(data == "pressure:Pa"){
+        std::cout << "the pressure measurement is set to Pascal" << std::endl;
         settings.savePressSettings("Pa");
     }
     else if(data == "pressure:ATM"){
+        std::cout << "the pressure measurement is set to ATM" << std::endl;
         settings.savePressSettings("ATM");
     }
     else if(data == "database:clear"){
         db_temp.clear_table_temp_press();
         db_mag.clear_table_magnetometr();
+    }
+    else if( data.compare(0, 5, "time:") == 0){
+        std::string valueStr = data.substr(5);
+        settings.saveTimeSettings(std::stoi(valueStr));
+        std::cout << "the time interval is set "<< std::stoi(valueStr) << std::endl;
     }
     else if(data == "database:load"){
         a.publish("sdk/test/python", "Tempreture and Pressure:\n" + db_temp.read_table_temp_press());

@@ -21,6 +21,7 @@ public:
     void loadSettings();
     void saveTempSettings(std::string temp_unit);
     void savePressSettings(std::string press_unit);
+    void saveTimeSettings(int);
     int getSensorPollIntervalMs();
     void loadFromJson(std::string&, aws&);
 };

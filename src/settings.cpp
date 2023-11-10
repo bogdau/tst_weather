@@ -55,6 +55,14 @@ void Settings::savePressSettings(std::string press_unit){
     boost::property_tree::write_json(json_path, pt);
 }
 
+void Settings::saveTimeSettings(int time_update){
+    loadSettings();
+    pt.put("data_output_time", time_update);
+    pt.put("temperature", temperature_unit);
+    pt.put("pressure", pressure_unit);
+    boost::property_tree::write_json(json_path, pt);
+}
+
 int Settings::getSensorPollIntervalMs(){
     return int(time);
 }
