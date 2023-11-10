@@ -77,18 +77,31 @@ void DataManager::command_selector(std::string& data,aws& a){
         std::cout << "the pressure measurement is set to ATM" << std::endl;
         settings.savePressSettings("ATM");
     }
-    else if(data == "database:clear"){
-        db_temp.clear_table_temp_press();
-        db_mag.clear_table_magnetometr();
-    }
     else if( data.compare(0, 5, "time:") == 0){
         std::string valueStr = data.substr(5);
         settings.saveTimeSettings(std::stoi(valueStr));
         std::cout << "the time interval is set "<< std::stoi(valueStr) << std::endl;
     }
+    else if(data == "database:clear"){
+        db_temp.clear_table_temp_press();
+        db_mag.clear_table_magnetometr();
+    }
     else if(data == "database:load"){
         a.publish("sdk/test/python", "Tempreture and Pressure:\n" + db_temp.read_table_temp_press());
         a.publish("sdk/test/python","Magnetometr:\n" + db_mag.read_table_magnetometr());
+    }
+    else if(data == "help"){
+        a.publish("sdk/test/python",
+        "\t\t\t\t---help--- \n\
+        temperature:C - set temperature measurement to Celsius \n\
+        temperature:F - set temperature measurement to Fahrenheit \n\
+        pressure:Pa - set pressure measurement to Pascal \n\
+        pressure:ATM - set pressure measirement to ATM \n\
+        time: *interval* - set time interval to custom in milliseconds by default 1000 \n\
+        -------------------------------------------------------------- \n\
+        database:clear - clear database column \n\
+        database:load - load database to aws \n\
+        "); 
     }
     else{
         std::cout << "unrecognize" << std::endl;
