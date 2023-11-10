@@ -87,11 +87,11 @@ void DataManager::command_selector(std::string& data,aws& a){
         db_mag.clear_table_magnetometr();
     }
     else if(data == "database:load"){
-        a.publish("sdk/test/python", "Tempreture and Pressure:\n" + db_temp.read_table_temp_press());
-        a.publish("sdk/test/python","Magnetometr:\n" + db_mag.read_table_magnetometr());
+        a.publish("sdk/tst_weather/config", "Tempreture and Pressure:\n" + db_temp.read_table_temp_press());
+        a.publish("sdk/tst_weather/config","Magnetometr:\n" + db_mag.read_table_magnetometr());
     }
     else if(data == "help"){
-        a.publish("sdk/test/python",
+        a.publish("sdk/tst_weather/config",
         "\t\t\t\t---help--- \n\
         temperature:C - set temperature measurement to Celsius \n\
         temperature:F - set temperature measurement to Fahrenheit \n\
