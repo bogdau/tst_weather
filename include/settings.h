@@ -18,7 +18,6 @@ public:
     std::string pressure_unit;
 
     Settings();
-    //    Settings(const Settings &) = default;
     void generateJsonFile();
     void loadSettings();
     void saveTempSettings(std::string temp_unit);

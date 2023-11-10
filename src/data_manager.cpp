@@ -35,18 +35,14 @@ int DataManager::data_manager()
     timer->start();
     return 0;
 }
-Test log.
 
-    void
-    DataManager::colect_data()
+void DataManager::colect_data()
 {
     DataOutput dtot;
 
     db_temp.insert_table_temp_press(m_reader->readTemp(), m_reader->readPressure());
-    // db_temp.read_table_temp_press();
 
     db_mag.insert_table_magnetometr(mki->lis3mdl_read_data_polling());
-    // db_mag.read_table_magnetometr();
 
     mki->lis3mdl_read_data_polling();
     static int i = 0;
@@ -72,17 +68,16 @@ void DataManager::command_selector(std::string &data, aws &a)
     {
         std::cout << "Unable to parse string" << data << std::endl;
 
-        a.publish("sdk/tst_weather/config",
-                  "\t\t\t\t---help--- \n\
-        temperature:C - set temperature measurement to Celsius \n\
-        temperature:F - set temperature measurement to Fahrenheit \n\
-        pressure:Pa - set pressure measurement to Pascal \n\
-        pressure:ATM - set pressure measirement to ATM \n\
-        time: *interval* - set time interval to custom in milliseconds by default 1000 \n\
-        -------------------------------------------------------------- \n\
-        database:clear - clear database column \n\
-        database:load - load database to aws \n\
-        ");
+        a.publish("sdk/tst_weather/pub",
+                  "\t\t\t\t---help--- \n"
+                  "temperature:C - set temperature measurement to Celsius \n"
+                  "temperature:F - set temperature measurement to Fahrenheit \n"
+                  "pressure:Pa - set pressure measurement to Pascal \n"
+                  "pressure:ATM - set pressure measirement to ATM \n"
+                  "time: *interval* - set time interval to custom in milliseconds by default 1000 \n"
+                  "-------------------------------------------------------------- \n"
+                  "database:clear - clear database column \n"
+                  "database:load - load database to aws \n");
         return;
     }
     std::string comand(data.begin(), index);
@@ -136,8 +131,8 @@ void DataManager::command_selector(std::string &data, aws &a)
         }
         else if (comand_data == "load")
         {
-            a.publish("sdk/tst_weather/config", "Tempreture and Pressure:\n" + db_temp.read_table_temp_press());
-            a.publish("sdk/tst_weather/config", "Magnetometr:\n" + db_mag.read_table_magnetometr());
+            a.publish("sdk/tst_weather/pub", "Tempreture and Pressure:\n" + db_temp.read_table_temp_press());
+            a.publish("sdk/tst_weather/pub", "Magnetometr:\n" + db_mag.read_table_magnetometr());
         }
         else
         {
@@ -146,17 +141,16 @@ void DataManager::command_selector(std::string &data, aws &a)
 
         break;
     default:
-        a.publish("sdk/tst_weather/config",
-                  "\t\t\t\t---help--- \n\
-        temperature:C - set temperature measurement to Celsius \n\
-        temperature:F - set temperature measurement to Fahrenheit \n\
-        pressure:Pa - set pressure measurement to Pascal \n\
-        pressure:ATM - set pressure measirement to ATM \n\
-        time: *interval* - set time interval to custom in milliseconds by default 1000 \n\
-        -------------------------------------------------------------- \n\
-        database:clear - clear database column \n\
-        database:load - load database to aws \n\
-        ");
+        a.publish("sdk/tst_weather/pub",
+                  "\t\t\t\t---help--- \n"
+                  "temperature:C - set temperature measurement to Celsius \n"
+                  "temperature:F - set temperature measurement to Fahrenheit \n"
+                  "pressure:Pa - set pressure measurement to Pascal \n"
+                  "pressure:ATM - set pressure measirement to ATM \n"
+                  "time: *interval* - set time interval to custom in milliseconds by default 1000 \n"
+                  "-------------------------------------------------------------- \n"
+                  "database:clear - clear database column \n"
+                  "database:load - load database to aws \n");
         break;
     }
 }

@@ -37,7 +37,7 @@ void aws::connect()
 
     connection->OnConnectionCompleted =
         std::bind(&aws::onConnectionCompleted, (this), std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4);
-    if (!connection->Connect("basicPubSub", false /*cleanSession*/, 1000 /*keepAliveTimeSecs*/))
+    if (!connection->Connect("basicPubSub", false , 1000 ))
     {
         fprintf(stderr, "MQTT Connection failed with error %s\n", ErrorDebugString(connection->LastError()));
         exit(-1);
@@ -65,13 +65,14 @@ void aws::subscribe(std::string topic, std::function<void(std::string)> callBack
         auto onMessage = [&](Mqtt::MqttConnection &,
                              const String &topic,
                              const ByteBuf &byteBuf,
-                             bool /*dup*/,
-                             Mqtt::QOS /*qos*/,
-                             bool /*retain*/)
+                             bool,
+                             Mqtt::QOS,
+                             bool)
         {
-            {
-                callBack(std::string((const char *)byteBuf.buffer));
-            }
+            fprintf(stdout, "Message: ");
+            fwrite(byteBuf.buffer, 1, byteBuf.len, stdout);
+            fprintf(stdout, "\n");
+            callBack(std::string((const char *)byteBuf.buffer));
         };
         auto onSubAck =
             [&](Mqtt::MqttConnection &, uint16_t packetId, const String &topic, Mqtt::QOS QoS, int errorCode)

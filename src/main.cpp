@@ -27,7 +27,7 @@ int main(int argc, char *argv[])
 
     std::unique_ptr<DataManager> dtrt = std::make_unique<DataManager>(settings,mki);
     a.connect();
-    a.subscribe("sdk/tst_weather/config",[&](std::string data){dtrt->command_selector(data,a);});
+    a.subscribe("sdk/tst_weather/sub",[&](std::string data){dtrt->command_selector(data,a);});
     Form main_window(settings);
     settings_pop_up set;
 
