@@ -9,21 +9,6 @@ aws::aws()
 }
 
 void aws::connect(){
-    std::ifstream root_ca_file("credentials/root-CA.crt", std::ios::binary);
-    std::stringstream root_ca;
-    root_ca << root_ca_file.rdbuf();
-      /************************ Setup ****************************/
-
-    // Do the global initialization for the API.
-
-
-    /**
-     * cmdData is the arguments/input from the command line placed into a single struct for
-     * use in this sample. This handles all of the command line parsing, validating, etc.
-     * See the Utils/CommandLineUtils for more information.
-     */
-
-    // Create the MQTT builder and populate it with data from cmdData.
     auto clientConfigBuilder = Aws::Iot::MqttClientConnectionConfigBuilder("credentials/tst-weather.cert.pem", "credentials/tst-weather.private.key");
     clientConfigBuilder.WithEndpoint("a2c27i8vurj003-ats.iot.eu-north-1.amazonaws.com");
     clientConfigBuilder.WithCertificateAuthority("credentials/root-CA.crt");
@@ -91,9 +76,7 @@ void aws::onDisconnect(Aws::Crt::Mqtt::MqttConnection &){
 void aws::subscribe(std::string topic,std::function<void(std::string)> callBack){
     if (connectionCompletedPromise.get_future().get())
     {
-        // std::mutex receiveMutex;
         uint32_t receivedCount = 0;
-        // This is invoked upon the receipt of a Publish on a subscribed topic.
         auto onMessage = [&](Mqtt::MqttConnection &,
                              const String &topic,
                              const ByteBuf &byteBuf,
@@ -101,12 +84,6 @@ void aws::subscribe(std::string topic,std::function<void(std::string)> callBack)
                              Mqtt::QOS /*qos*/,
                              bool /*retain*/) {
             {
-                // // std::lock_guard<std::mutex> lock(receiveMutex);
-                // ++receivedCount;
-                fprintf(stdout, "received from topic %s\n", topic.c_str());
-                fprintf(stdout, "Message: ");
-                fwrite(byteBuf.buffer, 1, byteBuf.len, stdout);
-                fprintf(stdout, "\n");
                 callBack(std::string((const char*)byteBuf.buffer));
             }
         };
@@ -132,8 +109,6 @@ void aws::subscribe(std::string topic,std::function<void(std::string)> callBack)
             };
         
         connection->Subscribe(topic.c_str(), AWS_MQTT_QOS_AT_LEAST_ONCE, onMessage, onSubAck);
-        // Subscribe for incoming publish messages on topic.
-        // std::promise<void> subscribeFinishedPromise;
     }
 }
 
