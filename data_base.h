@@ -18,11 +18,14 @@ public:
     void create_table_temp_press();
     void create_table_magnetometr();
 
-    void read_table_temp_press();
-    void read_table_magnetometr();
+    std::string read_table_temp_press();
+    std::string read_table_magnetometr();
 
     void insert_table_temp_press(int,int);
     void insert_table_magnetometr(QVector<int>);
+
+    void clear_table_temp_press();
+    void clear_table_magnetometr();
 };
 
 #endif // DATA_BASE_H

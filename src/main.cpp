@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QApplication>
 #include <QPushButton>
+#include <thread> 
 
 #include "include/bmp280data.h"
 #include "include/RawData.h"
@@ -11,14 +12,22 @@
 #include "form.h"
 #include "settings_pop_up.h"
 #include "src/mki109v1.h"
+#include "aws.h"
+
+#include <aws/crt/Api.h>
 
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
-
-    Settings settings;
+    ApiHandle apiHandle;
+    aws a;
     mki109v1 mki;
+    Settings settings;
+    
+
     std::unique_ptr<DataManager> dtrt = std::make_unique<DataManager>(settings,mki);
+    a.connect();
+    a.subscribe("sdk/tst_weather/sub",[&](std::string data){dtrt->command_selector(data,a);});
     Form main_window(settings);
     settings_pop_up set;
 

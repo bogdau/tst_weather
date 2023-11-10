@@ -1,5 +1,6 @@
 #include "data_base.h"
 #include <sqlite3.h>
+#include <sstream>
 data_base::data_base()
 {
 //    open_table_temp_press();
@@ -71,9 +72,7 @@ void data_base::insert_table_temp_press(int temp, int pressure){
     if (rc != SQLITE_OK) {
         std::cerr << "SQL error: " << errMsg << std::endl;
         sqlite3_free(errMsg);
-    } else {
-        std::cout << "Record inserted successfully" << std::endl;
-    }
+    } 
 }
 
 void data_base::insert_table_magnetometr(QVector<int> x){
@@ -88,14 +87,12 @@ void data_base::insert_table_magnetometr(QVector<int> x){
     if (rc != SQLITE_OK) {
         std::cerr << "SQL error: " << errMsg << std::endl;
         sqlite3_free(errMsg);
-    } else {
-        std::cout << "Record inserted successfully" << std::endl;
-    }
+    } 
 }
 
-void data_base::read_table_temp_press(){
+std::string data_base::read_table_temp_press(){
     const char* query = "SELECT * FROM TEMPERATURE_PRESSURE_DATA";
-
+    std::stringstream temp_pressure;
     sqlite3_stmt* stmt;
     int rc = sqlite3_prepare_v2(db, query, -1, &stmt, 0);
 
@@ -107,16 +104,17 @@ void data_base::read_table_temp_press(){
                  const char* timestamp = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 3));
 
                  std::cout << "ID: " << id << ", Timestamp: " << timestamp  << ", Temperature: " << temperature << ", Pressure: " << pressure << std::endl;
+                 temp_pressure <<  "ID: " << id << ", Timestamp: " << timestamp  << ", Temperature: " << temperature << ", Pressure: " << pressure << "\n";
              }
     } else {
         std::cerr << "Failed to execute query: " << sqlite3_errmsg(db) << std::endl;
     }
-
+    return temp_pressure.str();
 }
 
-void data_base::read_table_magnetometr(){
+std::string data_base::read_table_magnetometr(){
     const char* query = "SELECT * FROM MAGNETOMETR_DATA";
-
+    std::stringstream magnetometr;
     sqlite3_stmt* stmt;
     int rc = sqlite3_prepare_v2(db, query, -1, &stmt, 0);
 
@@ -129,9 +127,43 @@ void data_base::read_table_magnetometr(){
            const char* timestamp = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 4));
 
            std::cout << "ID: "<< id << ", Timestamp: " << timestamp  << ", x: " << x << ", y: " << y << ", z: " << z << std::endl;
+           magnetometr <<  "ID: "<< id << ", Timestamp: " << timestamp  << ", x: " << x << ", y: " << y << ", z: " << z << "\n";
        }
        sqlite3_finalize(stmt); // Clean up the prepared statement
     } else {
        std::cerr << "Failed to execute query: " << sqlite3_errmsg(db) << std::endl;
+    }
+    return magnetometr.str();
+}
+
+void data_base::clear_table_temp_press(){
+    char* errorMessage = nullptr;
+    int rc = sqlite3_open("temperature_pressure.db", &db);
+    const char* sql = "DELETE FROM TEMPERATURE_PRESSURE_DATA;";
+
+    rc = sqlite3_exec(db, sql, 0, 0, &errorMessage);
+
+    if (rc != SQLITE_OK) {
+        std::cerr << "SQL error: " << errorMessage << std::endl;
+        sqlite3_free(errorMessage);
+    } else {
+        std::cout << "All tables cleared successfully" << std::endl;
+    }
+
+        // sqlite3_close(db);
+}
+
+void data_base::clear_table_magnetometr(){
+char* errorMessage = nullptr;
+    int rc = sqlite3_open("magnetometr.db", &db);
+    const char* sql = "DELETE FROM MAGNETOMETR_DATA;";
+
+    rc = sqlite3_exec(db, sql, 0, 0, &errorMessage);
+
+    if (rc != SQLITE_OK) {
+        std::cerr << "SQL error: " << errorMessage << std::endl;
+        sqlite3_free(errorMessage);
+    } else {
+        std::cout << "All tables cleared successfully" << std::endl;
     }
 }

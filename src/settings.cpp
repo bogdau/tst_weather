@@ -6,6 +6,8 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <fcntl.h>
+#include <sqlite3.h>
+#include <data_base.h>
 using namespace boost::property_tree;
 
 Settings::Settings(){
@@ -50,6 +52,14 @@ void Settings::savePressSettings(std::string press_unit){
     pt.put("data_output_time", standart_time);
     pt.put("temperature", temperature_unit);
     pt.put("pressure", press_unit);
+    boost::property_tree::write_json(json_path, pt);
+}
+
+void Settings::saveTimeSettings(int time_update){
+    loadSettings();
+    pt.put("data_output_time", time_update);
+    pt.put("temperature", temperature_unit);
+    pt.put("pressure", pressure_unit);
     boost::property_tree::write_json(json_path, pt);
 }
 

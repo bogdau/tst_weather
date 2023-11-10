@@ -9,6 +9,8 @@ CONFIG += c++14
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    aws.cpp \
+    utils/CommandLineUtils.cpp \
     data_base.cpp \
     driver/bmp280.cpp \
     driver/lis3mdl_reg.c \
@@ -27,6 +29,8 @@ SOURCES += \
 
 
 HEADERS += \
+    aws.h \
+    utils/CommandLineUtils.h \
     data_base.h \
     driver/bmp280.h \
     driver/bmp280_defs.h \
@@ -53,7 +57,12 @@ UI_HEADERS_DIR = $$PWD
 
 LIBS += \
     -lmosquittopp \
-    -lsqlite3
+    -lsqlite3 \
+    -laws-crt-cpp \
+    -laws-c-common \
+    -lcrypto \
+
+
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
