@@ -5,6 +5,7 @@
 #include <QObject>
 #include <memory>
 #include <QTimer>
+#include <map>
 
 #include "include/data_reading.h"
 #include "include/settings.h"
@@ -17,6 +18,18 @@ class DataManager : public QObject
     Q_OBJECT
 
 private:
+    enum Command{
+        SET_TEMPERATURE_UNIT,
+        SET_PRESSURE_UNIT,
+        SET_TIME_INTERVAL,
+        DATABASE
+    };
+    std::map<std::string, Command> string_to_Comand = {
+        {"temperature", Command::SET_TEMPERATURE_UNIT},
+        {"pressure", Command::SET_PRESSURE_UNIT},
+        {"time", Command::SET_TIME_INTERVAL},
+        {"database", Command::DATABASE}
+    };
     std::unique_ptr<DataReading> m_reader;
     QTimer *timer;
     Settings settings;
@@ -26,16 +39,15 @@ private:
 signals:
     void tempChange(double temp);
     void pressChange(double press);
+
 public:
     DataManager(Settings &set, mki109v1 &mki);
     void class_manager(DataReading *dtrd);
     int data_manager();
     void mqtt_publish(double temp_cel, double temp_far, double pressure);
-    void command_selector(std::string&, aws&);
+    void command_selector(std::string &, aws &);
 public slots:
     void colect_data();
-
 };
 
 #endif /* __DATA_MANAGER_H__ */
-
