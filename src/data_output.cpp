@@ -1,7 +1,7 @@
 #include <iostream>
 #include <iomanip>
 #include <cmath>
-#include "../include/data_output.h"
+#include "include/data_output.h"
 
 DataOutput::DataOutput(){}
 

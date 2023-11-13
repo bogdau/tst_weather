@@ -1,5 +1,5 @@
-#include "../include/raspberry_bmp280.h"
-#include "../driver/bmp280.h"
+#include "include/raspberry_bmp280.h"
+#include "driver/bmp280.h"
 #include <ctime>
 #include <cerrno>
 #include <unistd.h>

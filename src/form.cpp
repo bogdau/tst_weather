@@ -1,5 +1,5 @@
-#include "form.h"
-#include "ui_form.h"
+#include "include/form.h"
+#include "ui/ui_form.h"
 #include <QString>
 #include <iostream>
 
