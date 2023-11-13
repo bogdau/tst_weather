@@ -4,13 +4,14 @@
 #include "boost/property_tree/ptree.hpp"
 #include <boost/property_tree/json_parser.hpp>
 #include <aws.h>
+#include <sqlite3.h>
 
 class Settings
 {
 private:
-    int const standart_time = 1000;
-    std::string json_path = "config/config.json";
-    boost::property_tree::ptree pt;
+    std::string const dir = "config/";
+    std::string const config_file = "config/settings.db";
+    sqlite3 *db;
     int time = 0;
 
 public:
@@ -18,7 +19,7 @@ public:
     std::string pressure_unit;
 
     Settings();
-    void generateJsonFile();
+    ~Settings();
     void loadSettings();
     void saveTempSettings(std::string temp_unit);
     void savePressSettings(std::string press_unit);
