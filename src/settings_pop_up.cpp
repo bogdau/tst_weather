@@ -1,5 +1,5 @@
-#include "settings_pop_up.h"
-#include "ui_settings_pop_up.h"
+#include "include/settings_pop_up.h"
+#include "ui/ui_settings_pop_up.h"
 #include <QPushButton>
 #include <iostream>
 

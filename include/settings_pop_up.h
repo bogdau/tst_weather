@@ -6,7 +6,7 @@
 #include <QComboBox>
 #include <QString>
 #include "include/data_reading.h"
-#include "form.h"
+#include "include/form.h"
 
 namespace Ui {
 class settings_pop_up;

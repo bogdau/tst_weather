@@ -49,8 +49,8 @@ HEADERS += \
     include/mki109v1.h \
 
 FORMS += \
-    src/form.ui \
-    settings_pop_up.ui
+    ui/form.ui \
+    ui/settings_pop_up.ui \
 
 UI_DIR = $$PWD/ui
 UI_HEADERS_DIR = $$PWD
