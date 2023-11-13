@@ -93,9 +93,9 @@ void  mki109v1::delay_stm (uint32_t millisec){
 
 QVector<int>  mki109v1::lis3mdl_read_data_polling()
 {
-    static int16_t data_raw_magnetic[3];
-    static int16_t data_raw_temperature;
-    static QVector<int> magnetic_mG;
+    int16_t data_raw_magnetic[3];
+    int16_t data_raw_temperature;
+    QVector<int> magnetic_mG;
     magnetic_mG.clear();
     magnetic_mG.reserve(3);
 //    static float temperature_degC;
