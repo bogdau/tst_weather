@@ -1,4 +1,4 @@
-#include "mki109v1.h"
+#include "include/mki109v1.h"
 #include "driver/lis3mdl_reg.h"
 #include <unistd.h>
 #include <fcntl.h>

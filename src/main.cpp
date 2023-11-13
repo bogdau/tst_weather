@@ -9,10 +9,10 @@
 #include "include/bmp280data.h"
 #include "include/RawData.h"
 #include "include/data_manager.h"
-#include "form.h"
-#include "settings_pop_up.h"
-#include "src/mki109v1.h"
-#include "aws.h"
+#include "include/form.h"
+#include "include/settings_pop_up.h"
+#include "include/mki109v1.h"
+#include "include/aws.h"
 
 #include <aws/crt/Api.h>
 

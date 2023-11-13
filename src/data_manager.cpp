@@ -9,9 +9,9 @@
 #include "include/data_reading.h"
 #include "include/settings.h"
 #include "include/mqtt.h"
-#include "form.h"
-#include "src/mki109v1.h"
-#include "data_base.h"
+#include "include/form.h"
+#include "include/mki109v1.h"
+#include "include/data_base.h"
 
 DataManager::DataManager(Settings &set, mki109v1 &mki) : m_reader(nullptr), settings(set), mki(&mki)
 {

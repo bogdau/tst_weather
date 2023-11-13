@@ -9,7 +9,7 @@
 
 #include "include/data_reading.h"
 #include "include/settings.h"
-#include "src/mki109v1.h"
+#include "include/mki109v1.h"
 #include "data_base.h"
 #include "aws.h"
 
