@@ -3,7 +3,7 @@
 
 #include "boost/property_tree/ptree.hpp"
 #include <boost/property_tree/json_parser.hpp>
-#include <aws.h>
+#include "include/aws.h"
 #include <sqlite3.h>
 
 class Settings

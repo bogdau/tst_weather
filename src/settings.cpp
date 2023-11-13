@@ -7,7 +7,7 @@
 #include <sys/types.h>
 #include <fcntl.h>
 #include <sqlite3.h>
-#include <data_base.h>
+#include "include/data_base.h"
 
 Settings::Settings()
 {
