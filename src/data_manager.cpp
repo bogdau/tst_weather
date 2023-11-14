@@ -77,6 +77,7 @@ void DataManager::command_selector(std::string &data, aws &a)
                   "time: *interval* - set time interval to custom in milliseconds by default 1000 \n"
                   "-------------------------------------------------------------- \n"
                   "database:clear - clear database column \n"
+                  "database:1-10 - delete row by id(example from 1 to 10) \n"
                   "database:load - load database to aws \n");
         return;
     }
