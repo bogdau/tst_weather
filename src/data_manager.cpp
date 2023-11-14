@@ -77,11 +77,24 @@ void DataManager::command_selector(std::string &data, aws &a)
                   "time: *interval* - set time interval to custom in milliseconds by default 1000 \n"
                   "-------------------------------------------------------------- \n"
                   "database:clear - clear database column \n"
+                  "database:1-10 - delete row by id(example from 1 to 10) \n"
                   "database:load - load database to aws \n");
         return;
     }
     std::string comand(data.begin(), index);
     std::string comand_data(index + 1, data.end());
+
+    int from_number = 0;
+    int to_number = 0;
+
+    auto comand_index = std::find(comand_data.begin(), comand_data.end(), '-');
+    if (comand_index != comand_data.end())
+    {
+        std::string from_number_str(comand_data.begin(), comand_index);
+        std::string to_number_str(comand_index + 1, comand_data.end());
+        from_number = std::stoi(from_number_str);
+        to_number = std::stoi(to_number_str);
+    }
 
     Command comand_token = string_to_Comand.find(comand)->second;
 
@@ -129,6 +142,11 @@ void DataManager::command_selector(std::string &data, aws &a)
             db_temp.clear_table_temp_press();
             db_mag.clear_table_magnetometr();
         }
+        else if (from_number > 0 && to_number > 0)
+        {
+            db_temp.clear_table_temp_press(from_number, to_number);
+            db_mag.clear_table_magnetometr(from_number, to_number);
+        }
         else if (comand_data == "load")
         {
             a.publish("sdk/tst_weather/pub", "Tempreture and Pressure:\n" + db_temp.read_table_temp_press());
@@ -150,6 +168,7 @@ void DataManager::command_selector(std::string &data, aws &a)
                   "time: *interval* - set time interval to custom in milliseconds by default 1000 \n"
                   "-------------------------------------------------------------- \n"
                   "database:clear - clear database column \n"
+                  "database:1-10 - delete row by id(example from 1 to 10) \n"
                   "database:load - load database to aws \n");
         break;
     }
