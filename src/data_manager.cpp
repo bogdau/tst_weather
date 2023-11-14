@@ -44,7 +44,6 @@ void DataManager::colect_data()
 
     db_mag.insert_table_magnetometr(mki->lis3mdl_read_data_polling());
 
-    mki->lis3mdl_read_data_polling();
     static int i = 0;
     if (i == 3)
     {
