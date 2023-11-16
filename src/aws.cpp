@@ -62,7 +62,7 @@ void aws::subscribe(std::string topic, std::function<void(std::string)> callBack
 {
     if (connectionCompletedPromise.get_future().get())
     {
-        auto onMessage = [&](Mqtt::MqttConnection &,
+        auto onMessage = [callBack](Mqtt::MqttConnection &,
                              const String &topic,
                              const ByteBuf &byteBuf,
                              bool,

@@ -20,7 +20,6 @@
 #include <unistd.h>
 #include <iostream>
 #include <fstream>
-#include "utils/CommandLineUtils.h"
 
 using namespace Aws::Crt;
 

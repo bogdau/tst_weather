@@ -4,7 +4,7 @@
 #include <QObject>
 #include <QApplication>
 #include <QPushButton>
-#include <thread> 
+#include <thread>
 
 #include "include/bmp280data.h"
 #include "include/RawData.h"
@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
     aws a;
     mki109v1 mki;
     Settings settings;
-    
+
 
     std::unique_ptr<DataManager> dtrt = std::make_unique<DataManager>(settings,mki);
     a.connect();

@@ -9,7 +9,6 @@ CONFIG += c++14
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    utils/CommandLineUtils.cpp \
     driver/bmp280.cpp \
     driver/lis3mdl_reg.c \
     src/data_base.cpp \
@@ -29,7 +28,6 @@ SOURCES += \
 
 
 HEADERS += \
-    utils/CommandLineUtils.h \
     driver/bmp280.h \
     driver/bmp280_defs.h \
     driver/lis3mdl_reg.h \
