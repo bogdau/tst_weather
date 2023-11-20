@@ -9,7 +9,6 @@ CONFIG += c++14
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    driver/bmp280.cpp \
     driver/lis3mdl_reg.c \
     src/data_base.cpp \
     src/aws.cpp \
@@ -21,15 +20,17 @@ SOURCES += \
     src/form.cpp \
     src/main.cpp \
     src/mqtt.cpp \
-    src/raspberry_bmp280.cpp \
+#    src/raspberry_bmp280.cpp \
     src/settings.cpp\
     src/settings_pop_up.cpp\
     src/mki109v1.cpp \
+    i2c_impl/I2CInputOutput.cpp \
+    i2c_impl/RaspberryPi.cpp \
+    i2c_impl/I2CDevice.cpp \
+    BMP280/BMP280.cpp \
 
 
 HEADERS += \
-    driver/bmp280.h \
-    driver/bmp280_defs.h \
     driver/lis3mdl_reg.h \
     include/aws.h \
     include/data_base.h \
@@ -39,12 +40,16 @@ HEADERS += \
     include/data_output.h \
     include/data_reading.h \
     include/mqtt.h \
-    include/raspberry_bmp280.h \
+#    include/raspberry_bmp280.h \
     include/settings.h \
     include/bmp280data.h\
     include/form.h\
     include/settings_pop_up.h\
     include/mki109v1.h \
+    i2c_impl/I2CInputOutput.h \
+    i2c_impl/RaspberryPi.h \
+    BMP280/BMP280.h \
+    i2c_impl/I2CDevice.h \
 
 FORMS += \
     ui/form.ui \
