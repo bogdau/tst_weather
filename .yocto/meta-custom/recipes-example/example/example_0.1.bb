@@ -15,7 +15,7 @@ SRC_URI[sha256sum] = "16fed98a21dbb03a8080bce8cf4ac85df11842b214e64beebab2144e6e
 S = "${WORKDIR}/git"
 #B = "${WORKDIR}
 
-DEPENDS = "mosquitto boost  qtbase qtx11extras"
+DEPENDS = "mosquitto boost  qtbase qtx11extras aws-iot-device-sdk-cpp-v2 sqlite3"
 #RDEPENDS:${PN} += "qtwayland"
 
 CFLAGS += "-I${STAGING_INCDIR}/mosquitto -I${STAGING_INCDIR}/boost"
