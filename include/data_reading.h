@@ -1,6 +1,7 @@
 #ifndef __DATA_READING_H__
 #define __DATA_READING_H__
-#include "raspberry_bmp280.h"
+#include "BMP280/BMP280.h"
+#include "i2c_impl/RaspberryPi.h"
 #include <QObject>
 
 

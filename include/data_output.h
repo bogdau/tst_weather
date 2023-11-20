@@ -1,7 +1,7 @@
 #ifndef __DATA_OUTPUT_H__
 #define __DATA_OUTPUT_H__
 
-#include "../include/raspberry_bmp280.h"
+//#include "include/raspberry_bmp280.h"
 #include "data_reading.h"
 class DataOutput
 {

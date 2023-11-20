@@ -6,14 +6,13 @@
 #include <QPushButton>
 #include <thread>
 
-#include "include/bmp280data.h"
 #include "include/RawData.h"
 #include "include/data_manager.h"
 #include "include/form.h"
 #include "include/settings_pop_up.h"
 #include "include/mki109v1.h"
 #include "include/aws.h"
-
+#include "include/bmp280data.h"
 #include <aws/crt/Api.h>
 
 int main(int argc, char *argv[])
@@ -24,7 +23,6 @@ int main(int argc, char *argv[])
     mki109v1 mki;
     Settings settings;
 
-
     std::unique_ptr<DataManager> dtrt = std::make_unique<DataManager>(settings,mki);
     a.connect();
     a.subscribe("sdk/tst_weather/sub",[&](std::string data){dtrt->command_selector(data,a);});
@@ -32,14 +30,7 @@ int main(int argc, char *argv[])
     settings_pop_up set;
 
     BMP280Data *bmp_data = new BMP280Data;
-    RawData *raw_data = new RawData;
-
-    if(bmp_data->init() ==  true){
-        dtrt->class_manager(raw_data);
-    }
-    else{
-        dtrt->class_manager(bmp_data);
-    }
+    dtrt->class_manager(bmp_data);
 
     QObject::connect(&main_window, &Form::setting_request,&set, [&set](){set.show();} );
 
