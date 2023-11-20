@@ -80,6 +80,7 @@ RUN git clone git://git.yoctoproject.org/poky -b $YOCTO_RELEASE
 # RUN pip3 install -r /poky/bitbake/toaster-requirements.txt
 
 WORKDIR /poky
+RUN mkdir /poky/build
 
 # COPY poky/meta-custom /poky/
 # It is redundand, due to NXP repo contains pinned version of meta-openembedded as submodule
@@ -91,12 +92,12 @@ RUN git clone https://github.com/meta-qt5/meta-qt5.git -b $YOCTO_RELEASE
 RUN git clone https://github.com/aws4embeddedlinux/meta-aws.git -b $YOCTO_RELEASE
 COPY meta-custom /poky/meta-custom
 COPY meta-image-config /poky/meta-image-config
-COPY conf/ /poky/build/conf
+COPY conf /poky/build/conf
 COPY custom-images/ /poky/custom-images
 
 RUN chown -R dev:dev /poky
 
-USER dev
+# USER dev
 WORKDIR /poky/
 
 #RUN sudo rm -rf /poky/build/conf 
