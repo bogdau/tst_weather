@@ -64,6 +64,8 @@ LIBS += \
     -laws-crt-cpp \
     -laws-c-common \
     -lcrypto \
+    -lwiringPi \
+    -lpthread \
 
 
 # Default rules for deployment.
