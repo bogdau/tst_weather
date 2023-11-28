@@ -37,9 +37,9 @@ void oled::init(double temp, double press)
   fclose(fp);
 
   char elements[20];
-  sprintf(elements," %.2f ",temp);
+  sprintf(elements," %.2f °C ",temp);
   char elements2[20];
-  sprintf(elements2," %d ",(int)press);
+  sprintf(elements2," %d Pa",(int)press);
 
   num = 1;
   sv.save[num].size = f.String2SJIS((unsigned char *)elements, strlen(elements), sv.save[num].sjis, 16);
