@@ -28,6 +28,8 @@ SOURCES += \
     i2c_impl/RaspberryPi.cpp \
     i2c_impl/I2CDevice.cpp \
     BMP280/BMP280.cpp \
+    dispay_sh1106/oled.cpp \
+    dispay_sh1106/fontx.cpp \
 
 
 HEADERS += \
@@ -48,8 +50,11 @@ HEADERS += \
     include/mki109v1.h \
     i2c_impl/I2CInputOutput.h \
     i2c_impl/RaspberryPi.h \
-    BMP280/BMP280.h \
     i2c_impl/I2CDevice.h \
+    BMP280/BMP280.h \
+    dispay_sh1106/oled.h \
+    dispay_sh1106/fontx.h \
+
 
 FORMS += \
     ui/form.ui \
