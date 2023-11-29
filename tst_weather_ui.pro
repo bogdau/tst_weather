@@ -8,6 +8,13 @@ CONFIG += c++14
 # In order to do so, uncomment the following line.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
+SOURCE_FOLDER = $$PWD/fontx
+DESTINATION_FOLDER = $$OUT_PWD/fontx
+
+copy_folder.commands = $$quote(cp -r $$quote($$SOURCE_FOLDER) $$quote($$DESTINATION_FOLDER))
+QMAKE_EXTRA_TARGETS += copy_folder
+PRE_TARGETDEPS += copy_folder
+
 SOURCES += \
     driver/lis3mdl_reg.c \
     src/data_base.cpp \
