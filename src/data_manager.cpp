@@ -34,7 +34,6 @@ int DataManager::data_manager()
     connect(timer, &QTimer::timeout, this, &DataManager::colect_data);
     timer->start();
     oled o;
-    o.clear_display();
     return 0;
 }
 
