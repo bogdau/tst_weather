@@ -13,7 +13,7 @@ void oled::init(double temp, double press)
   FILE *fp;
   SaveFrame sv;
 
-  int offset = 0;
+  int offset = 2;
   int page = 8;
   struct stat stat_buf;
   if (stat(cpath, &stat_buf) == 0)
@@ -89,7 +89,7 @@ void oled::clear_display()
    FILE *fp;
    SaveFrame sv;
 
-   int offset = 0;
+   int offset = 2;
    int page = 8;
    struct stat stat_buf;
    if (stat(cpath, &stat_buf) == 0)
