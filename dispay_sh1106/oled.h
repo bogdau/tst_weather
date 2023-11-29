@@ -37,7 +37,7 @@ class oled
 {
 private:
   FontxFile fx[2];
-    fonxt f;
+  fonxt f;
   static unsigned char init_command[];
 
   unsigned char frame[1024];
@@ -47,22 +47,17 @@ private:
   FILE *fp;
   SaveFrame sv;
 
-  int offset = 0;
+  int offset = 2;
   int page = 8;
   int spos;
   char numc[5];
-  int num;
   void init_i2c(uint8_t i2caddr);
   int drawSJISChar(FontxFile *fx, int x, int y, uint16_t sjis, uint8_t reverse, uint8_t enhance);
   void show_i2c(int page, int offset);
   void DumpSaveFrame(SaveFrame hoge);
 
 public:
-  void clear_display();
-  void show_display();
   void init(double temp, double press);
-  void update_display_temperature(double temperature);
-  void update_display_pressure(double pressure);
   oled();
 };
 
