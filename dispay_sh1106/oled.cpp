@@ -2,19 +2,12 @@
 #include <iostream>
 #include <cstdio>
 
-oled::oled(){
-    // std::cout << "Constructor" << std::endl;
+oled::oled()
+{
 }
 
 void oled::init(double temp, double press)
 {
-   int i;
-  char cpath[128] = "oled.conf";
-  FILE *fp;
-  SaveFrame sv;
-
-  int offset = 2;
-  int page = 8;
   struct stat stat_buf;
   if (stat(cpath, &stat_buf) == 0)
   {
@@ -27,8 +20,8 @@ void oled::init(double temp, double press)
     memset(&sv, 0, sizeof(sv));
   }
 
-  f.Fontx_init(fx, "./fontx/ILGH16XB.FNT", "./fontx/ILGZ16XB.FNT"); // 16Dot Gothic
-  int num;
+  f.Fontx_init(fx, "./fontx/ILGH16XB.FNT", "./fontx/ILGZ16XB.FNT");
+  int num = 0;
 
   memset(&sv, 0, sizeof(sv));
 
@@ -37,9 +30,9 @@ void oled::init(double temp, double press)
   fclose(fp);
 
   char elements[20];
-  sprintf(elements," Temp: %.2f C",temp);
+  sprintf(elements, " Temp: %.2f C", temp);
   char elements2[20];
-  sprintf(elements2," Press: %d Pa",(int)press);
+  sprintf(elements2, " Press: %d Pa", (int)press);
 
   num = 1;
   sv.save[num].size = f.String2SJIS((unsigned char *)elements, strlen(elements), sv.save[num].sjis, 16);
@@ -62,7 +55,6 @@ void oled::init(double temp, double press)
   {
     if (sv.save[num].size == 0)
       continue;
-    //      y = 1;
     y = sv.save[num].colum + 1;
     for (i = 0; i < sv.save[num].size; i++)
     {
@@ -79,74 +71,7 @@ unsigned char oled::init_command[] = {
     0xAE, 0xA8, 0x3F, 0xD3, 0x00, 0x40, 0xA1, 0xC8,
     0xD5, 0x80, 0xDA, 0x12, 0x81, 0xFF,
     0xA4, 0xDB, 0x40, 0x20, 0x02, 0x00, 0x10, 0x8D,
-    0x14, 0x2E, 0xA6, 0xAF
-};
-
-void oled::clear_display()
-{
-    int i;
-   char cpath[128] = "oled.conf";
-   FILE *fp;
-   SaveFrame sv;
-
-   int offset = 2;
-   int page = 8;
-   struct stat stat_buf;
-   if (stat(cpath, &stat_buf) == 0)
-   {
-     fp = fopen(cpath, "rb");
-     fread(&sv, sizeof(sv), 1, fp);
-     fclose(fp);
-   }
-   else
-   {
-     memset(&sv, 0, sizeof(sv));
-   }
-
-   f.Fontx_init(fx, "./fontx/ILGH16XB.FNT", "./fontx/ILGZ16XB.FNT"); // 16Dot Gothic
-   int num;
-
-   memset(&sv, 0, sizeof(sv));
-
-   fp = fopen(cpath, "wb");
-   fwrite(&sv, sizeof(sv), 1, fp);
-   fclose(fp);
-
-   char elements[20] = "";
-   char elements2[20] = "";
-   num = 1;
-   sv.save[num].size = f.String2SJIS((unsigned char *)elements, strlen(elements), sv.save[num].sjis, 16);
-   sv.save[num].ank = 0;
-   sv.save[num].utf = 1;
-   fp = fopen(cpath, "wb");
-   fwrite(&sv, sizeof(sv), 1, fp);
-
-   num = 2;
-   sv.save[num].size = f.String2SJIS((unsigned char *)elements2, strlen(elements2), sv.save[num].sjis, 16);
-   sv.save[num].ank = 0;
-   sv.save[num].utf = 1;
-
-   fwrite(&sv, sizeof(sv), 1, fp);
-   fclose(fp);
-
-   init_i2c(I2C_ADDRESS);
-   int y;
-   for (num = 0; num < 4; num++)
-   {
-     if (sv.save[num].size == 0)
-       continue;
-     //      y = 1;
-     y = sv.save[num].colum + 1;
-     for (i = 0; i < sv.save[num].size; i++)
-     {
-       if (sv.save[num].utf)
-         y = drawSJISChar(fx, num + 1, y, sv.save[num].sjis[i], sv.save[num].reverse,
-                          sv.save[num].enhance);
-     }
-   }
-
-   show_i2c(page, offset);
-}
+    0x14, 0x2E, 0xA6, 0xAF};
 
 void oled::init_i2c(uint8_t i2caddr)
 {
@@ -208,4 +133,3 @@ void oled::show_i2c(int page, int offset)
     }
   }
 }
-
