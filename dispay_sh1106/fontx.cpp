@@ -5,9 +5,7 @@
 #include <iconv.h>
 #include "fontx.h"
 
-#define FontxDebug 0 // for Debug
-
-// フォントファイルパスを構造体に保存
+#define FontxDebug 0 
 void fonxt::Fontx_addFont(FontxFile *fx, const char *path)
 {
   memset(fx, 0, sizeof(FontxFile));
@@ -15,14 +13,12 @@ void fonxt::Fontx_addFont(FontxFile *fx, const char *path)
   fx->opened = false;
 }
 
-// フォント構造体を初期化
 void fonxt::Fontx_init(FontxFile *fxs, const char *f0, const char *f1)
 {
   Fontx_addFont(&fxs[0], f0);
   Fontx_addFont(&fxs[1], f1);
 }
 
-// フォントファイルをOPEN
 bool fonxt::Fontx_openFontxFile(FontxFile *fx)
 {
   FILE *f;
@@ -42,9 +38,6 @@ bool fonxt::Fontx_openFontxFile(FontxFile *fx)
       char buf[18];
 
       fread(buf, sizeof buf, 1, fx->file);
-      //      for(i=0;i<sizeof(buf);i++) {
-      //        printf("buf[%d]=%x\n",i,buf[i]);
-      //      }
       memcpy(fx->fxname, &buf[6], 8);
       fx->w = buf[14];
       fx->h = buf[15];
@@ -65,7 +58,6 @@ bool fonxt::Fontx_openFontxFile(FontxFile *fx)
   return fx->valid;
 }
 
-// フォントファイルをCLOSE
 void fonxt::Fontx_closeFontxFile(FontxFile *fx)
 {
   if (fx->opened)
@@ -206,7 +198,6 @@ void fonxt::Font2Bitmap(uint8_t *fonts, uint8_t *line, uint8_t w, uint8_t h, uin
   }
 }
 
-// アンダーラインを追加
 void fonxt::UnderlineBitmap(uint8_t *line, uint8_t w, uint8_t h)
 {
   int x, y;
@@ -222,7 +213,6 @@ void fonxt::UnderlineBitmap(uint8_t *line, uint8_t w, uint8_t h)
   }
 }
 
-// ビットマップを反転
 void fonxt::ReversBitmap(uint8_t *line, uint8_t w, uint8_t h)
 {
   int x, y;
@@ -237,7 +227,6 @@ void fonxt::ReversBitmap(uint8_t *line, uint8_t w, uint8_t h)
   }
 }
 
-// フォントパターンの表示
 void fonxt::ShowFont(uint8_t *fonts, uint8_t pw, uint8_t ph)
 {
   int x, y, fpos;
@@ -261,7 +250,6 @@ void fonxt::ShowFont(uint8_t *fonts, uint8_t pw, uint8_t ph)
   }
 }
 
-// Bitmapの表示
 void fonxt::ShowBitmap(uint8_t *bitmap, uint8_t pw, uint8_t ph)
 {
   int x, y, fpos;
@@ -280,7 +268,6 @@ void fonxt::ShowBitmap(uint8_t *bitmap, uint8_t pw, uint8_t ph)
     printf("%02d", y);
     for (x = 0; x < pw; x++)
     {
-      // printf("b=%x m=%x\n",bitmap[x+(y/8)*32],0x80 >> fpos);
       if (bitmap[x + (y / 8) * 32] & (0x80 >> fpos))
       {
         printf("*");
@@ -297,7 +284,6 @@ void fonxt::ShowBitmap(uint8_t *bitmap, uint8_t pw, uint8_t ph)
   }
 }
 
-// フォント構造体の表示
 void fonxt::DumpFX(FontxFile *fxs)
 {
   int i;
@@ -315,7 +301,6 @@ void fonxt::DumpFX(FontxFile *fxs)
   }
 }
 
-// UTF code(3Byte) を SJIS Code(2 Byte) に変換
 uint16_t fonxt::UTF2SJIS(uint8_t *utf8)
 {
   unsigned char strJIS[3] = {0};
@@ -359,7 +344,6 @@ uint16_t fonxt::UTF2SJIS(uint8_t *utf8)
   return sjis;
 }
 
-// UTFを含む文字列をSJISに変換
 int fonxt::String2SJIS(unsigned char *str_in, uint8_t stlen, uint16_t *sjis,
                 uint8_t ssize)
 {
@@ -377,11 +361,11 @@ int fonxt::String2SJIS(unsigned char *str_in, uint8_t stlen, uint16_t *sjis,
     if (FontxDebug)
       printf("[String2SJIS]sp[%d]=%x\n", i, sp);
     if ((sp & 0xf0) == 0xe0)
-    { // 上位4ビットが1110なら、3バイト文字の1バイト目
+    {
       c1 = sp;
     }
     else if ((sp & 0xc0) == 0x80)
-    { // 上位2ビットが10なら、他バイト文字の2バイト目以降
+    {
       if (c2 == 0)
       {
         c2 = sp;
@@ -425,7 +409,7 @@ int fonxt::String2SJIS(unsigned char *str_in, uint8_t stlen, uint16_t *sjis,
       }
     }
     else if ((sp & 0x80) == 0)
-    { // 1バイト文字の場合
+    { 
       if (FontxDebug)
         printf("[String2SJIS]ANK %x\n", sp);
       if (spos < ssize)
