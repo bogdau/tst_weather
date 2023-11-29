@@ -12,7 +12,6 @@
 #include "include/form.h"
 #include "include/mki109v1.h"
 #include "include/data_base.h"
-#include "dispay_sh1106/oled.h"
 
 DataManager::DataManager(Settings &set, mki109v1 &mki) : m_reader(nullptr), settings(set), mki(&mki)
 {
@@ -42,7 +41,6 @@ int DataManager::data_manager()
 void DataManager::colect_data()
 {
     DataOutput dtot;
-    oled o;
     o.init(m_reader->readTemp(), m_reader->readPressure());
 
     db_temp.insert_table_temp_press(m_reader->readTemp(), m_reader->readPressure());

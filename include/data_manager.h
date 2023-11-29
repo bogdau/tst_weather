@@ -12,6 +12,7 @@
 #include "include/mki109v1.h"
 #include "data_base.h"
 #include "aws.h"
+#include "dispay_sh1106/oled.h"
 
 class DataManager : public QObject
 {
@@ -36,6 +37,7 @@ private:
     mki109v1 *mki;
     data_base db_mag;
     data_base db_temp;
+    oled o;
 signals:
     void tempChange(double temp);
     void pressChange(double press);
