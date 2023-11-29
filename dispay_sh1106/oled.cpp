@@ -37,9 +37,9 @@ void oled::init(double temp, double press)
   fclose(fp);
 
   char elements[20];
-  sprintf(elements," %.2f °C ",temp);
+  sprintf(elements," Temp: %.2f C",temp);
   char elements2[20];
-  sprintf(elements2," %d Pa",(int)press);
+  sprintf(elements2," Press: %d Pa",(int)press);
 
   num = 1;
   sv.save[num].size = f.String2SJIS((unsigned char *)elements, strlen(elements), sv.save[num].sjis, 16);
@@ -81,26 +81,6 @@ unsigned char oled::init_command[] = {
     0xA4, 0xDB, 0x40, 0x20, 0x02, 0x00, 0x10, 0x8D,
     0x14, 0x2E, 0xA6, 0xAF
 };
-
-void oled::show_display()
-{
-  init_i2c(I2C_ADDRESS);
-  int y;
-  for (num = 0; num < 4; num++)
-  {
-    // if (sv.save[num].size == 0)
-    //   continue;
-    //      y = 1;
-    y = sv.save[num].colum + 1;
-    for (i = 0; i < 4; i++)
-    {
-      if (sv.save[num].utf)
-        y = drawSJISChar(fx, num + 1, y, sv.save[num].sjis[i], sv.save[num].reverse,
-                         sv.save[num].enhance);
-    }
-  }
-  // show_i2c(page, offset);
-}
 
 void oled::clear_display()
 {
@@ -229,28 +209,3 @@ void oled::show_i2c(int page, int offset)
   }
 }
 
-void oled::DumpSaveFrame(SaveFrame hoge)
-{
-  int i, j;
-
-  for (i = 0; i < 4; i++)
-  {
-    printf("[%d].ank=%d ", i, hoge.save[i].ank);
-    printf("[%d].utf=%d ", i, hoge.save[i].utf);
-    printf("[%d].colum=%d ", i, hoge.save[i].colum);
-    printf("[%d].reverse=%d ", i, hoge.save[i].reverse);
-    printf("[%d].enhance=%d n", i, hoge.save[i].enhance);
-    printf("[%d].size=%d\n", i, hoge.save[i].size);
-    for (j = 0; j < hoge.save[i].size; j++)
-    {
-      if (hoge.save[i].ank == 1)
-      {
-        printf("[%d].ascii[%d]=%x\n", i, j, hoge.save[i].ascii[j]);
-      }
-      if (hoge.save[i].utf == 1)
-      {
-        printf("[%d].ascii[%d]=%x\n", i, j, hoge.save[i].sjis[j]);
-      }
-    }
-  }
-}
