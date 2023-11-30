@@ -77,7 +77,6 @@ LIBS += \
     -laws-c-common \
     -lcrypto \
     -lwiringPi \
-    -lpthread \
 
 
 # Default rules for deployment.
