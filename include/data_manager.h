@@ -37,7 +37,7 @@ private:
     mki109v1 *mki;
     data_base db_mag;
     data_base db_temp;
-    oled o;
+    oled oled_display;
 signals:
     void tempChange(double temp);
     void pressChange(double press);
