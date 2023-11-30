@@ -43,7 +43,7 @@ int mki109v1::read_register(int busfd, __uint16_t reg, unsigned char *buf, int b
     ret = write_bus(busfd, reg_buf, 1);
     if (ret < 0) {
         printf("Failed to write [0x%02x] (reg: %02x).\n", reg_buf[0], reg);
-        std::cout << errno << std::endl;
+//        std::cout << errno << std::endl;
         return ret;
     }
     return read_bus(busfd, buf, bufsize);

@@ -8,6 +8,13 @@ CONFIG += c++14
 # In order to do so, uncomment the following line.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
+SOURCE_FOLDER = $$PWD/fontx
+DESTINATION_FOLDER = $$OUT_PWD/fontx
+
+copy_folder.commands = $$quote(cp -r $$quote($$SOURCE_FOLDER) $$quote($$DESTINATION_FOLDER))
+QMAKE_EXTRA_TARGETS += copy_folder
+PRE_TARGETDEPS += copy_folder
+
 SOURCES += \
     driver/lis3mdl_reg.c \
     src/data_base.cpp \
@@ -28,6 +35,8 @@ SOURCES += \
     i2c_impl/RaspberryPi.cpp \
     i2c_impl/I2CDevice.cpp \
     BMP280/BMP280.cpp \
+    dispay_sh1106/oled.cpp \
+    dispay_sh1106/fontx.cpp \
 
 
 HEADERS += \
@@ -48,8 +57,11 @@ HEADERS += \
     include/mki109v1.h \
     i2c_impl/I2CInputOutput.h \
     i2c_impl/RaspberryPi.h \
-    BMP280/BMP280.h \
     i2c_impl/I2CDevice.h \
+    BMP280/BMP280.h \
+    dispay_sh1106/oled.h \
+    dispay_sh1106/fontx.h \
+
 
 FORMS += \
     ui/form.ui \
@@ -64,6 +76,8 @@ LIBS += \
     -laws-crt-cpp \
     -laws-c-common \
     -lcrypto \
+    -lwiringPi \
+    -lpthread \
 
 
 # Default rules for deployment.

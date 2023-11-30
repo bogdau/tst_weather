@@ -1,0 +1,432 @@
+#include <stdio.h>
+#include <stdint.h>
+#include <stdbool.h>
+#include <string.h>
+#include <iconv.h>
+#include "fontx.h"
+
+#define FontxDebug 0 
+void fonxt::Fontx_addFont(FontxFile *fx, const char *path)
+{
+  memset(fx, 0, sizeof(FontxFile));
+  fx->path = path;
+  fx->opened = false;
+}
+
+void fonxt::Fontx_init(FontxFile *fxs, const char *f0, const char *f1)
+{
+  Fontx_addFont(&fxs[0], f0);
+  Fontx_addFont(&fxs[1], f1);
+}
+
+bool fonxt::Fontx_openFontxFile(FontxFile *fx)
+{
+  FILE *f;
+
+  if (!fx->opened)
+  {
+    fx->opened = true;
+    f = fopen(fx->path, "r");
+    if (!f)
+    {
+      fx->valid = false;
+      printf("FsFontx:%s not found.\n", fx->path);
+    }
+    else
+    {
+      fx->file = f;
+      char buf[18];
+
+      fread(buf, sizeof buf, 1, fx->file);
+      memcpy(fx->fxname, &buf[6], 8);
+      fx->w = buf[14];
+      fx->h = buf[15];
+      fx->is_ank = (buf[16] == 0);
+      fx->bc = buf[17];
+      fx->fsz = (fx->w + 7) / 8 * fx->h;
+      if (fx->fsz > FontxGlyphBufSize)
+      {
+        printf("too big font size.\n");
+        fx->valid = false;
+      }
+      else
+      {
+        fx->valid = true;
+      }
+    }
+  }
+  return fx->valid;
+}
+
+void fonxt::Fontx_closeFontxFile(FontxFile *fx)
+{
+  if (fx->opened)
+  {
+    fclose(fx->file);
+    fx->opened = false;
+  }
+}
+
+bool fonxt::GetFontx(FontxFile *fxs, uint32_t sjis, uint8_t *pGlyph,
+              uint8_t *pw, uint8_t *ph)
+{
+
+  int i;
+  //  FontxFile fx;
+  long offset;
+
+  if (FontxDebug)
+    printf("[GetFontx]sjis=%x %d\n", sjis, sjis);
+  for (i = 0; i < 2; i++)
+  {
+    if (!Fontx_openFontxFile(&fxs[i]))
+      continue;
+    //    printf("openFontxFile[%d]\n",i);
+
+    if (sjis < 0x100)
+    {
+      if (fxs[i].is_ank)
+      {
+        if (FontxDebug)
+          printf("[GetFontx]fxs.is_ank fxs.fsz=%d\n", fxs[i].fsz);
+        offset = 17 + sjis * fxs[i].fsz;
+        if (FontxDebug)
+          printf("[GetFontx]offset=%ld\n", offset);
+        if (fseek(fxs[i].file, offset, SEEK_SET))
+        {
+          printf("Fontx::fseek(18) failed.\n");
+          return false;
+        }
+        if (fread(pGlyph, 1, fxs[i].fsz, fxs[i].file) != fxs[i].fsz)
+        {
+          printf("Fontx::fread failed.\n");
+          return false;
+        }
+        if (pw)
+          *pw = fxs[i].w;
+        if (ph)
+          *ph = fxs[i].h;
+        return true;
+      }
+    }
+    else
+    {
+      if (!fxs[i].is_ank)
+      {
+        if (fseek(fxs[i].file, 18, SEEK_SET))
+        {
+          printf("Fontx::fseek(18) failed.\n");
+          return false;
+        }
+        uint16_t buf[2], nc = 0, bc = fxs[i].bc;
+
+        while (bc--)
+        {
+          if (fread((char *)buf, 1, 4, fxs[i].file) != 4)
+          {
+            printf("Fontx::fread failed.\n");
+            return false;
+          }
+          if (FontxDebug)
+            printf("[GetFontx]buf=%x %x\n", buf[0], buf[1]);
+          if (sjis >= buf[0] && sjis <= buf[1])
+          {
+            nc += sjis - buf[0];
+            uint32_t pos = 18 + fxs[i].bc * 4 + nc * fxs[i].fsz;
+            if (fseek(fxs[i].file, pos, SEEK_SET))
+            {
+              printf("FsFontx::seek(%u) failed.\n", pos);
+              return false;
+            }
+            if (fread(pGlyph, 1, fxs[i].fsz, fxs[i].file) != fxs[i].fsz)
+            {
+              printf("Fontx::fread failed.\n");
+              return false;
+            }
+            if (pw)
+              *pw = fxs[i].w;
+            if (ph)
+              *ph = fxs[i].h;
+            return true;
+          }
+          nc += buf[1] - buf[0] + 1;
+        }
+      }
+    }
+  }
+  return false;
+}
+
+void fonxt::Font2Bitmap(uint8_t *fonts, uint8_t *line, uint8_t w, uint8_t h, uint8_t inverse)
+{
+  int x, y;
+  for (y = 0; y < (h / 8); y++)
+  {
+    for (x = 0; x < w; x++)
+    {
+      line[y * 32 + x] = 0;
+    }
+  }
+
+  int mask = 7;
+  int fontp;
+  fontp = 0;
+  for (y = 0; y < h; y++)
+  {
+    for (x = 0; x < w; x++)
+    {
+      uint8_t d = fonts[fontp + x / 8];
+      uint8_t linep = (y / 8) * 32 + x;
+      if (d & (0x80 >> (x % 8)))
+        line[linep] = line[linep] + (1 << mask);
+    }
+    mask--;
+    if (mask < 0)
+      mask = 7;
+    fontp += (w + 7) / 8;
+  }
+
+  if (inverse)
+  {
+    for (y = 0; y < (h / 8); y++)
+    {
+      for (x = 0; x < w; x++)
+      {
+        line[y * 32 + x] = RotateByte(line[y * 32 + x]);
+      }
+    }
+  }
+}
+
+void fonxt::UnderlineBitmap(uint8_t *line, uint8_t w, uint8_t h)
+{
+  int x, y;
+  uint8_t wk;
+  for (y = 0; y < (h / 8); y++)
+  {
+    for (x = 0; x < w; x++)
+    {
+      wk = line[y * 32 + x];
+      if ((y + 1) == (h / 8))
+        line[y * 32 + x] = wk + 0x80;
+    }
+  }
+}
+
+void fonxt::ReversBitmap(uint8_t *line, uint8_t w, uint8_t h)
+{
+  int x, y;
+  uint8_t wk;
+  for (y = 0; y < (h / 8); y++)
+  {
+    for (x = 0; x < w; x++)
+    {
+      wk = line[y * 32 + x];
+      line[y * 32 + x] = ~wk;
+    }
+  }
+}
+
+void fonxt::ShowFont(uint8_t *fonts, uint8_t pw, uint8_t ph)
+{
+  int x, y, fpos;
+  fpos = 0;
+  for (y = 0; y < ph; y++)
+  {
+    printf("%02d", y);
+    for (x = 0; x < pw; x++)
+    {
+      if (fonts[fpos + x / 8] & (0x80 >> (x % 8)))
+      {
+        printf("*");
+      }
+      else
+      {
+        printf(".");
+      }
+    }
+    printf("\n");
+    fpos = fpos + (pw + 7) / 8;
+  }
+}
+
+void fonxt::ShowBitmap(uint8_t *bitmap, uint8_t pw, uint8_t ph)
+{
+  int x, y, fpos;
+  for (y = 0; y < (ph + 7) / 8; y++)
+  {
+    for (x = 0; x < pw; x++)
+    {
+      printf("%02x ", bitmap[x + y * 32]);
+    }
+    printf("\n");
+  }
+
+  fpos = 0;
+  for (y = 0; y < ph; y++)
+  {
+    printf("%02d", y);
+    for (x = 0; x < pw; x++)
+    {
+      if (bitmap[x + (y / 8) * 32] & (0x80 >> fpos))
+      {
+        printf("*");
+      }
+      else
+      {
+        printf(".");
+      }
+    }
+    printf("\n");
+    fpos++;
+    if (fpos > 7)
+      fpos = 0;
+  }
+}
+
+void fonxt::DumpFX(FontxFile *fxs)
+{
+  int i;
+  for (i = 0; i < 2; i++)
+  {
+    printf("fxs[%d]->path=%s\n", i, fxs[i].path);
+    printf("fxs[%d]->opened=%d\n", i, fxs[i].opened);
+    printf("fxs[%d]->fxname=%s\n", i, fxs[i].fxname);
+    printf("fxs[%d]->valid=%d\n", i, fxs[i].valid);
+    printf("fxs[%d]->is_ank=%d\n", i, fxs[i].is_ank);
+    printf("fxs[%d]->w=%d\n", i, fxs[i].w);
+    printf("fxs[%d]->h=%d\n", i, fxs[i].h);
+    printf("fxs[%d]->fsz=%d\n", i, fxs[i].fsz);
+    printf("fxs[%d]->bc=%d\n", i, fxs[i].bc);
+  }
+}
+
+uint16_t fonxt::UTF2SJIS(uint8_t *utf8)
+{
+  unsigned char strJIS[3] = {0};
+  unsigned char *pi1 = utf8;
+  unsigned char **pi2 = &pi1;
+  unsigned char *po1 = strJIS;
+  unsigned char **po2 = &po1;
+  size_t ilen = 3;
+  size_t olen = 2;
+  iconv_t cd;
+  uint16_t sjis;
+
+  if ((cd = iconv_open("sjis", "utf-8")) == (iconv_t)-1)
+  {
+    if (FontxDebug)
+      printf("iconv open fail \n");
+    return 0;
+  }
+  else
+  {
+    if (FontxDebug)
+      printf("iconv open ok \n");
+  }
+
+  iconv(cd, (char **)pi2, &ilen, (char **)po2, &olen);
+  iconv_close(cd);
+
+  if (FontxDebug)
+    printf("[UTF2SJIS]strJIS=%x-%x\n", strJIS[0], strJIS[1]);
+  if (strJIS[0] & 0x80)
+  {
+    sjis = strJIS[0] << 8;
+    sjis = sjis + strJIS[1];
+  }
+  else
+  {
+    sjis = strJIS[0];
+  }
+  if (FontxDebug)
+    printf("[UTF2SJIS]sjis=%x\n", sjis);
+  return sjis;
+}
+
+int fonxt::String2SJIS(unsigned char *str_in, uint8_t stlen, uint16_t *sjis,
+                uint8_t ssize)
+{
+  int i;
+  uint8_t sp;
+  uint8_t c1 = 0;
+  uint8_t c2 = 0;
+  uint8_t utf8[3];
+  uint16_t sjis2;
+  int spos = 0;
+
+  for (i = 0; i < stlen; i++)
+  {
+    sp = str_in[i];
+    if (FontxDebug)
+      printf("[String2SJIS]sp[%d]=%x\n", i, sp);
+    if ((sp & 0xf0) == 0xe0)
+    {
+      c1 = sp;
+    }
+    else if ((sp & 0xc0) == 0x80)
+    {
+      if (c2 == 0)
+      {
+        c2 = sp;
+      }
+      else
+      {
+        if (c1 == 0xef && c2 == 0xbd)
+        {
+          if (FontxDebug)
+            printf("[String2SJIS]hankaku kana %x-%x-%x\n", c1, c2, sp);
+          sjis2 = sp;
+          if (FontxDebug)
+            printf("[String2SJIS]sjis2=%x\n", sjis2);
+          if (spos < ssize)
+            sjis[spos++] = sjis2;
+        }
+        else if (c1 == 0xef && c2 == 0xbe)
+        {
+          if (FontxDebug)
+            printf("[String2SJIS]hankaku kana %x-%x-%x\n", c1, c2, sp);
+          sjis2 = 0xc0 + (sp - 0x80);
+          if (FontxDebug)
+            printf("[String2SJIS]sjis2=%x\n", sjis2);
+          if (spos < ssize)
+            sjis[spos++] = sjis2;
+        }
+        else
+        {
+          if (FontxDebug)
+            printf("[String2SJIS]UTF8 %x-%x-%x\n", c1, c2, sp);
+          utf8[0] = c1;
+          utf8[1] = c2;
+          utf8[2] = sp;
+          sjis2 = UTF2SJIS(utf8);
+          if (FontxDebug)
+            printf("[String2SJIS]sjis2=%x\n", sjis2);
+          if (spos < ssize)
+            sjis[spos++] = sjis2;
+        }
+        c1 = c2 = 0;
+      }
+    }
+    else if ((sp & 0x80) == 0)
+    { 
+      if (FontxDebug)
+        printf("[String2SJIS]ANK %x\n", sp);
+      if (spos < ssize)
+        sjis[spos++] = sp;
+    }
+  }
+  return spos;
+}
+
+uint8_t fonxt::RotateByte(uint8_t ch1)
+{
+  uint8_t ch2;
+  int j;
+  for (j = 0; j < 8; j++)
+  {
+    ch2 = (ch2 << 1) + (ch1 & 0x01);
+    ch1 = ch1 >> 1;
+  }
+  return ch2;
+}
