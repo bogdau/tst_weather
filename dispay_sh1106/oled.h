@@ -57,7 +57,7 @@ private:
   void DumpSaveFrame(SaveFrame hoge);
 
 public:
-  void init(double temp, double press);
+  void display_info(double temp, double press);
   oled();
 };
 

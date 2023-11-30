@@ -6,7 +6,7 @@ oled::oled()
 {
 }
 
-void oled::init(double temp, double press)
+void oled::display_info(double temp, double press)
 {
   struct stat stat_buf;
   if (stat(cpath, &stat_buf) == 0)

@@ -40,7 +40,7 @@ int DataManager::data_manager()
 void DataManager::colect_data()
 {
     DataOutput dtot;
-    o.init(m_reader->readTemp(), m_reader->readPressure());
+    o.display_info(m_reader->readTemp(), m_reader->readPressure());
 
     db_temp.insert_table_temp_press(m_reader->readTemp(), m_reader->readPressure());
 
