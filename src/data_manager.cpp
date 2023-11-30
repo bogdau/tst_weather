@@ -33,7 +33,6 @@ int DataManager::data_manager()
     timer->setInterval(settings.getSensorPollIntervalMs());
     connect(timer, &QTimer::timeout, this, &DataManager::colect_data);
     timer->start();
-    oled o;
     return 0;
 }
 
