@@ -7,38 +7,30 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda
 #FILESEXTRAPATHS:append= "${THISDIR}/files:"
 
 SRC_URI = "git://github.com/bohdan-kharytonov/tst_weather.git;branch=dev;protocol=https "
-#SRC_URI += "file://aust.service "
-#SRC_URI = "git@github.com:bohdan-kharytonov/tst_weather.git"
-SRCREV = "ab397ca0687d3fccfff7c820863a849b5f3942a9"
+
+SRCREV = "fc05388f093db982dc01f704c1876d36e48ae681"
 SRC_URI[sha256sum] = "16fed98a21dbb03a8080bce8cf4ac85df11842b214e64beebab2144e6e53b4af"
 
 S = "${WORKDIR}/git"
-#B = "${WORKDIR}
 
-DEPENDS = "mosquitto boost  qtbase qtx11extras aws-iot-device-sdk-cpp-v2 sqlite3"
-#RDEPENDS:${PN} += "qtwayland"
+DEPENDS = "mosquitto boost  qtbase qtx11extras aws-iot-device-sdk-cpp-v2 sqlite3 wiringpi "
 
-CFLAGS += "-I${STAGING_INCDIR}/mosquitto -I${STAGING_INCDIR}/boost"
+CFLAGS += "-I${STAGING_INCDIR}/mosuitto -I${STAGING_INCDIR}/boost"
 LDFLAGS += "-L${STAGING_LIBDIR}/boost"
-
-#inherit systemd
-
-#SYSTEMD_AUTO_ENABLE = "enable"
-#SYSTEMD_SERVICE:${PN} = "aust.service"
-FILES:${PN} += "/lib/systemd/system/aust.service \ 
-		 ${systemd_system_unitdir} \
-		/opt/tst_weather_ui/bin/tst_weather_ui"
 
 do_configure() {
     # ...
 }
 
-do_install() {
-	install -d ${D}${bindir}
-	install -m 0755 tst_weather ${D}${bindir}/tst_weather
-	install -d ${D}/${systemd_system_unitdir}/system
-  	install -m 0644 ${WORKDIR}/aust.service ${D}/${systemd_system_unitdir}/system
+do_install:append() {
+	install -d ${D}${bindir}/fontx
+  	install -m 0755 ${S}/fontx/ILGH16XB.FNT ${D}${bindir}/fontx/ILGH16XB.FNT
+  	install -m 0755 ${S}/fontx/ILGZ16XB.FNT ${D}${bindir}/fontx/ILGZ16XB.FNT
 }
+FILES:${PN} += "\
+				/opt/tst_weather_ui/bin/tst_weather_ui \
+				/opt/tst_weather_ui/bin/fontx/ \
+				"
 
 inherit qmake5
 
