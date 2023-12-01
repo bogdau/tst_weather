@@ -36,4 +36,10 @@
 /build
 
 tst_weather_ui.pro.user
-
+.yocto/build/__pycache__/
+.yocto/build/bitbake-cookerdaemon.log
+.yocto/build/cache/
+.yocto/build/downloads/
+.yocto/build/pyshtables.py
+.yocto/build/sstate-cache/
+.yocto/build/tmp/
