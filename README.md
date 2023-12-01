@@ -7,7 +7,7 @@ The main functions include sending data from the database to AWS and receiving c
 Clone the repo
 
 ```sh
-  git clone git@github.com:bohdan-kharytonov/tst_weather.git
+  git clone https://github.com/bohdan-kharytonov/tst_weather.git
 ```
 Run Podman to create a container 
 
